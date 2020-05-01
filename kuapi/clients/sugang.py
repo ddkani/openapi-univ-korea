@@ -8,3 +8,7 @@ class SugangClient:
 
     def fetch_year_timetable(self, year=int):
         pass
+
+
+    def fetch_each_course(self):
+        pass

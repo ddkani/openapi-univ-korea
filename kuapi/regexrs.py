@@ -23,7 +23,7 @@ class SugangRegexr:
 
     @staticmethod
     def regex_course_timetable(raw: str) -> tuple:
-        assert not isinstance(raw, str)
+        assert isinstance(raw, str)
         assert raw != ""
 
         def build_time(t: str):

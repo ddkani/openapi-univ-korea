@@ -8,6 +8,8 @@ from types import GeneratorType
 
 from kuapi.enums.sugang import Campus, Term, Week
 from kuapi.regexrs import SugangRegexr
+from kuapi.miscs import satinize
+
 
 log = logging.getLogger(__name__)
 
@@ -96,15 +98,15 @@ class SugangParser(HtmlParser):
 
         # 첫번째 테이블은 자료 주석이므로 실행하지 않음.
         for _lec in tree.xpath("//tr[position() > 1]"):
-            tds = _lec.xpath("//td")
+            tds = _lec.xpath(".//td")
 
             # _campus = Campus.parse(tds[0].text).value
-            _cour_cd = tds[1].text
+            _cour_cd = tds[1].text_content().strip() # XPath("string()")
             _cls = int(tds[2].text)
             ## 이수구분
             _name = tds[4].text.strip()
-            ## 교수이름 - 상세정보에서 가져오기
-            _score = parse("{time:w}(  {credit:w})", tds[6].text.trim()).named['score']
+            ## 교수이름 - 상세정보에서 가져오기 / parse:: 이름 명시하지 않으면 named에서 생략 가능.
+            _score = parse("{time:w}(  {score:w})", tds[6].text.strip()).named['score']
             ## 강의시간 / 강의실 - 상세정보에서 가져오기
 
             log.debug("name=%s, cour_cd=%s, cls=%s, score=%s" % (
@@ -129,7 +131,7 @@ class SugangParser(HtmlParser):
         tree = self.init_tree(raw_html)
 
         basics = tree.xpath('//form[@name="form1"]/input')
-        tds = tree.xpath('//div[@class="tbl_view]/table//td')
+        tds = tree.xpath('//table[@class="tbl_view"]//td')
 
         _time = tds[0].text
         timetables = list()
@@ -139,17 +141,29 @@ class SugangParser(HtmlParser):
                 _p = SugangRegexr.regex_course_timetable(_t)
                 if _p: timetables.append(_p)
 
-        return {
-            'year' : int(basics[2].text),
-            'term' : Term(basics[3].text),
-            'dept_cd' : basics[4].text,
-            'cour_cd' : basics[5].text,
-            'grad_cd' : basics[6].text, ## ?
-            'cour_cls' : int(basics[7].text),
-            'name' : basics[8].text,
-            'col_cd' : basics[9].text,
+        year = int(basics[2].value.strip())
+        term = Term(basics[3].value.strip())
+        dept_cd = basics[4].value.strip()
+        cour_cd = basics[5].value.strip()
+        grad_cd = basics[6].value.strip()
+        cour_cls = int(basics[7].value)
+        name = basics[8].value.strip()
+        col_cd = basics[9].value.strip()
+
+        ret = {
+            'year' : year,
+            'term' : term,
+            'dept_cd' : dept_cd,
+            'cour_cd' : cour_cd,
+            'grad_cd' : grad_cd, ## ?
+            'cour_cls' : cour_cls,
+            'name' : name,
+            'col_cd' : col_cd,
             'timetables' : timetables
         }
+        log.debug(ret)
+
+        return ret
 
 
     def parse_professor(self, raw_html: str) -> dict:
@@ -161,20 +175,20 @@ class SugangParser(HtmlParser):
         assert raw_html != ""
         tree = self.init_tree(raw_html)
 
-        photo_url = tree.xpath('//span[@class="photo"]/img')[0].attrib('src')
-        tds = tree.xpath('//div[@class="bottom_view]/table//td')
+        photo_url = 'http://infodepot.korea.ac.kr/' + tree.xpath('//span[@class="photo"]/img')[0].attrib['src']
+        tds = tree.xpath('//div[@class="bottom_view"]/table//td')
 
         prof_cd = int(search("Id={:w}", photo_url).fixed[0])
 
-        name = tds[0].text
-        department_name = tds[1].text
-        email = tds[2].text
-        homepage = tds[3].text
-        lab = tds[4].text
-        tel = tds[5].text
-        meeting = tds[6].text
+        name = satinize(tds[0].text)
+        department_name = satinize(tds[1].text)
+        email = satinize(tds[2].text)
+        homepage = satinize(tds[3].text)
+        lab = satinize(tds[4].text)
+        tel = satinize(tds[5].text)
+        meeting = satinize(tds[6].text)
 
-        return {
+        ret = {
             'photo_url' : photo_url,
             'prof_cd' : prof_cd,
             'name' : name,
@@ -185,3 +199,6 @@ class SugangParser(HtmlParser):
             'tel' : tel,
             'metting' : meeting
         }
+
+        log.debug(ret)
+        return ret

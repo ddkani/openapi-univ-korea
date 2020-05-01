@@ -30,24 +30,22 @@ class SugangParserTestClass(TestCase):
         ret = list(self.parser.parse_colleages(
             read_file('colleage.html')
         ))
-        for r in ret:
-            log.debug("name=%s col_cd=%s" % (r['name'], r['col_cd']))
 
         assert ret[0]['name'] == '공공정책대학' and ret[0]['col_cd'] == '6112'
         assert ret[-1]['name'] == '세종학생군사교육단(관)' and ret[-1]['col_cd'] == '6446'
-        log.info('test_parse_colleage test pass!')
+        log.info('test_parse_colleage test pass!\n')
+        log.info('------------------------------------------------')
 
 
     def test_parse_department(self):
         ret = list(self.parser.parse_departments(
             read_file('department.html')
         ))
-        for r in ret:
-            log.debug("name=%s dept_cd=%s" % (r['name'], r['dept_cd']))
 
         assert ret[0]['name'] == '생명공학부' and ret[0]['dept_cd'] == '4654'
         assert ret[-1]['name'] == '의과학융합전공' and ret[-1]['dept_cd'] == '5019'
-        log.info('test_parse_department test pass!')
+        log.info('test_parse_department test pass!\n')
+        log.info('------------------------------------------------')
 
 
     def test_parse_courses(self):
@@ -55,15 +53,28 @@ class SugangParserTestClass(TestCase):
             read_file('courses.html')
         ))
 
-        for r in ret:
-            # log.debug("name=%s dept_cd=%s" % (r['name'], r['dept_cd']))
-            log.debug(r)
+        assert ret[0]['name'] == '환경조경학' and ret[0]['cour_cd'] == 'LIET219'
+        assert ret[-1]['name'] == '지역및도시계획학' and ret[-1]['cour_cd'] == 'LIET492'
+        log.info('test_parse_courses test pass!\n')
+        log.info('------------------------------------------------')
+
 
     def test_parse_course(self):
-        pass
+        ret = self.parser.parse_course(
+            read_file('course.html')
+        )
+        assert ret['year'] == 2020 and ret['dept_cd'] == '5437'
+        log.info('test_parse_course test pass!\n')
+        log.info('------------------------------------------------')
 
-    def test_parse_cours_detail(self):
-        pass
 
+    # 교수님 데이터는 학생 상세정보에서 가져옵니다.
     def test_parse_professor(self):
-        pass
+        ret = self.parser.parse_professor(
+            read_file('course.html')
+        )
+
+        assert ret['prof_cd'] == 99999999
+        # 교수님 정보는 개인정보가 들어있으므로 테스트 정보로 변경
+        log.info('test_parse_professor test pass!\n')
+        log.info('------------------------------------------------')
