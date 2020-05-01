@@ -19,11 +19,20 @@ class Campus(Enum):
     "세종캠퍼스"
 
     @staticmethod
-    def serialize(r):
+    def serialize(r) -> str:
         if r == 1:
             return '서울'
         elif r == 2:
             return '세종'
+        else:
+            raise ValueError(r)
+
+    @staticmethod
+    def parse(r):
+        if r == "서울":
+            return Campus.seoul
+        elif r == "세종":
+            return Campus.sejong
         else:
             raise ValueError(r)
 
@@ -41,7 +50,7 @@ class Term(Enum):
     winter = '2W'
     "계절수업(겨울) 2W"
     inter = 'SC'
-    "국제교류 - 안암캠퍼스 전용 SC"
+    "국제교류  SC"
 
     @staticmethod
     def parse(r):
@@ -71,7 +80,6 @@ class Term(Enum):
         else:
             raise ValueError(r)
 
-
 class Week(Enum):
     monday = "월"
     tuesday = "화"
@@ -81,3 +89,6 @@ class Week(Enum):
     saturday = "토"
     sunday = "일"
 
+class Complition(Enum):
+    # 다 정리된 파일이 있었는데 어디 갔더라...
+    pass

@@ -1,0 +1,195 @@
+
+
+ 
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+	<title>고려대학교 수강신청 시스템</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<link type="text/css" rel="stylesheet" href="/style/pin/style.css"  charset="euc-kr" />
+	<link type="text/css" rel="stylesheet" href="/style/pin/sub.css"  charset="euc-kr" />
+	<link type="text/css" rel="stylesheet" href="/style/pin/jquery-ui-1.10.3.custom.css" charset="euc-kr" />
+	<script type="text/javascript" src="/js/pin/jquery-1.10.2.min.js" charset="euc-kr"></script>
+	<script type="text/javascript" src="/js/pin/jquery-ui-1.10.3.custom.min.js" charset="euc-kr"></script>
+	<script type="text/javascript" src="/js/pin/jquery_controller.js" charset="euc-kr"></script>
+<!--[if lte IE 8]>
+	<script type="text/javascript" src="/js/pin/PIE.js"></script>
+<![endif]-->
+	<script type="text/javascript" src="/script.js"></script>
+	<script type="text/javascript" src="/js/netfunnel.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var lang = "KOR";
+		
+		function body_onload(){
+			changeCol(frm_ms, frm_ms.col, frm_ms.dept);
+		}
+	
+		function changeCol(frm, col, dept){
+			var sURL = "LecDeptPopup.jsp";
+			var deptCd = "";
+			parent.ITemp.location.href = sURL+ "?frm="+frm.name+"&colcd="+col.value+"&deptcd="+deptCd+"&dept="+dept.name+"&year="+document.frm_ms.yy.value+"&term="+document.frm_ms.tm.value+"&lang="+lang;
+		}
+	
+		function f_lmt(year, term, courcd, courcls, gradcd, chasu){
+			var sURL = "";
+			var height = 0;
+			if(lang == "KOR"){
+				if(chasu == "20"){
+					sURL = "../lecture/LecLmtInfoWish.jsp";
+					height = 280;
+				}else{
+					sURL = "../lecture/LecLmtInfo.jsp";
+					//height = 280;
+					height = 320;
+				}
+			} else {
+				if(chasu == "20"){
+					sURL = "../lecture/LecLmtInfoWishEng.jsp";
+					height = 340;
+				}else{
+					sURL = "../lecture/LecLmtInfoEng.jsp";
+					height = 340;
+				}
+			}	    	
+			
+			open(sURL + "?courcd="+courcd+"&courcls="+courcls+"&year="+year+"&term="+term,"new","width=280,height="+ height +",toolbar=no,resizable=no,scrollbars=no,titlebar=no");
+		}
+		
+		//유연학기확인
+		function f_fsGo(courCls, startDt, endDt, term){
+			window.open("/lecture/LecSubFS.jsp?courCls="+courCls+"&startDt="+startDt+"&endDt="+endDt+"&term="+term+"&lang="+lang,"fsGo","width=450,height=150,left=100,top=50,toolbar=no,resizable=no,scrollbars=no,titlebar=no");
+		}
+		
+		//교시확인표
+		function f_timetalelayer(){
+	    	open("/TimeTableCodeLayer.jsp","new","width=360,height=560,toolbar=no,resizable=no,scrollbars=no,titlebar=no");
+		}
+	
+		function f_submit(){
+			var year = document.frm_ms.yy.value;
+	
+			if( isYYYY(year) ==false  ){
+				if(lang == "KOR") {
+					alert("년도가 정확하지 않습니다. \n 정확하게 다시 입력해 주십시요.");
+				} else {
+					alert("Invalid year! \n Please, enter again.");
+				}
+				document.frm_ms.yy.value="";
+				document.frm_ms.yy.focus();
+				return false;
+			}
+			//frm_ms.submit();
+			NetFunnel_Action({action_id: "sugang_action",popup_target:top.firstF.ILec, use_frame_block:true, frame_block_list:[{win:top.secondF}]},frm_ms);
+	
+		}
+		
+		function f_change(){
+			$('#col option[value=1]').attr("selected",true);
+			frm_ms.submit();
+		}
+	</script>
+</head>
+<body onload="body_onload();">
+	<div class="sub_content">
+		<div class="top_page">
+			<h3>학부전공과목</h3>
+			<span class="line">&nbsp;</span>		
+		</div>
+		<div class="page">
+			<form name="frm_ms" method="post">
+				<div class="tbl_search2">
+					<div class="single">
+						<label>상세검색</label>
+						<span class="line">&nbsp;</span>
+						<div>
+						
+						<!--%@ page language="java" contentType="text/html;charSet=euc-kr" %-->
+
+
+
+
+
+<input type="text" class="ipt3" name="yy" maxlength="4" value="2020">&nbsp;<select name="tm" >
+
+            <option selected value="1R">1학기</option>
+
+
+      <option value="1S">여름학기</option>
+
+      <option value="2R">2학기</option>
+
+      <option value="2W">겨울학기</option>
+
+      <option value="SC">국제하계대학</option>
+
+</select>
+
+ 
+						<select name="sCampus" onchange="f_change();">
+							<option value="1" >서울</option>
+							<option value="2" selected>세종</option>
+						</select>
+						
+	                       	<select name="col" id="col" onChange="changeCol(frm_ms, this, frm_ms.dept);" style="width:100px;">
+	                       		<option value="1" style="color:black" >대학리스트</option>
+						
+								<option   value="6112" STYLE="color:black" >공공정책대학</option>
+						
+								<option   value="4460" STYLE="color:black" >과학기술대학</option>
+						
+								<option   value="6111" STYLE="color:black" >글로벌비즈니스대학</option>
+						
+								<option   value="6113" STYLE="color:black" >문화스포츠대학</option>
+						
+								<option   value="5314" STYLE="color:black" >약학대학</option>
+						
+								<option   value="3647" STYLE="color:black" >교무기획팀(관)</option>
+						
+								<option   value="3646" STYLE="color:black" >국제교류교육원(관)</option>
+						
+								<option   value="6446" STYLE="color:black" >세종학생군사교육단(관)</option>
+						 
+							</select>
+							<select name="dept" id="dept" style="width:100px;"></select>
+						</div>
+						<span class="box_right">
+							<span class="line">&nbsp;</span>
+							<input type="submit" class="mbtn submit" value="조회" onclick="javascript:f_submit();" />
+						</span>	
+					</div>
+					
+					<div class="form_btns">
+						<input type="button" value="출력" class="mbtn btnwhite" name="bu_print" onclick="javascript:window.print();"/>
+						<input type="button" value="교시확인표" class="mbtn btnwhite" name="bu_print" onclick="javascript:f_timetalelayer();"/>
+					</div>
+					
+				</div>
+				<div class="notice_blk type1">
+					<p>
+					
+						<b>1) M:</b> MOOC
+						<b>2) FC:</b> Flipped Class
+						<b>3) T:</b> Tutorial
+					
+					</p>
+					<p>
+					
+						학수번호 클릭시 <b>강의계획안 조회</b>가 가능합니다.
+					
+					</p>
+					<p>
+					
+						강의계획안 학생의견 작성 안내 : 포털 로그인->수업->수강안내->학부 전공과목/교양교직과목 내에서 해당 과목 학수번호 클릭 후 강의계획서 조회하여 조회되는 강의계획서 하단에 의견 작성 가능
+					
+					</p>		
+				</div>
+						
+			</form>
+		</div>
+	</div>	
+	</body>
+</html>

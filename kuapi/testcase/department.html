@@ -1,0 +1,123 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>고려대학교 수강신청 시스템</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+
+<script>
+	function fnc(){
+		obj = parent.ILec.document.frm_ms.dept;
+		cnt = obj.length;
+		
+		for(i=0;i<cnt;i++){
+			obj.remove(0);
+		}
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="4654";
+            el.text = "생명공학부";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="4719";
+            el.text = "생명과학대학";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="4653";
+            el.text = "생명과학부";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="4656";
+            el.text = "환경생태공학부";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="5186";
+            el.text = "기후변화융합전공";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="6607";
+            el.text = "미생물융합기술융합전공";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="4425";
+            el.text = "생태조경융합전공";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="5564";
+            el.text = "식품공학과";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="4657";
+            el.text = "식품자원경제학과";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+            
+			//사용하지 않는 학과는 빨강색으로 표시 2002.09.16
+			el.style.color = "black";
+			el.selected = "";  
+            el.value ="5019";
+            el.text = "의과학융합전공";
+            obj.options.add(el);
+
+        	obj.style.visibility = "";
+        	obj.style.position = "";
+
+		location.replace("/blank.jsp");
+	}
+</script>
+
+</head>
+<body onload="fnc();">
+<center>검색중입니다.</center>
+</body>
+</html>
+

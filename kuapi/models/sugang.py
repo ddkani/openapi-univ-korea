@@ -209,4 +209,3 @@ class CourseTimetable(IdModelMixin, Model):
     # TODO: 시간표 시간 실제시간으로 변환하여 혼용(멀티캠퍼스 지원)대비 -> 추후작성예정!
 
     location = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
-
