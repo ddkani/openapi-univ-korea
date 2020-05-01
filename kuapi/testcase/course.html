@@ -1,0 +1,420 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             		
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <title>교과목 상세내역</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+   <META HTTP-EQUIV="pragma" CONTENT="no-cache">
+	
+
+
+
+
+
+
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, target-densitydpi=medium-dpi" />
+
+<meta http-equiv="Cache-Control" content="no-store"/>  
+<meta http-equiv="Pragma" content="no-cache"/>  
+<meta http-equiv="Expires" content="0"/>  
+<link type="text/css" rel="stylesheet" href="/css/new/style.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/sub.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/jquery-ui-1.10.3.custom.css"  charset="euc-kr" />
+<!--[if IE 9]>
+<link type="text/css" rel="stylesheet" href="/css/new/ie.css" />
+<![endif]-->
+
+	
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/js/new/jquery-1.10.2.min.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/js/new/jquery-ui-1.10.3.custom.min.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/js/new/jquery_controller.js" charset="euc-kr"></script>
+<!--[if lte IE 8]>
+<script type="text/javascript" src="/js/new/PIE.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+	document.domain = 'korea.ac.kr';
+	var img_src = '/images';
+	var css_src = '/css';
+	var js_src = '/js';
+	var yyyymmdd = '20200501';
+	var language = 'ko';
+	$(window).load(function(){
+		try {
+			top.setResize(this);
+		} catch(e) {
+			
+		}
+	});
+	$(document).ready(function(){
+		   $('.close').click(function(){
+			   window.close();
+			});
+	   });
+</script>
+
+   <script type="text/javascript">
+      function f_list(){    
+		location.href='./LecPlan.jsp?year=2020&term=1R&dept_cd=5437&cour_cd=CYDF206&cour_cls=00&cour_nm=과목11(영강)&grad_cd=0136&languageDiv=ko';
+      }
+
+      function f_print(){
+         w_width  = 800;		
+         w_height	= 600;		
+         w_left	= (screen.width -   parseInt(w_width)) / 2;		
+         w_top		= (screen.height -  parseInt(w_height)) / 2;		
+         var sURL		  = './LSPPrint.jsp?year=2020&term=1R&gradcd=0136&deptcd=5437&courcd=CYDF206&courcls=00&empno=99999999&subempno=&languageDiv=K';
+         
+         var sWName	  = "DMPrint";		
+         var sWFeature = "status=no,scrollbars=yes,toolbar=no,location=no,directories=no,resizable=yes,menubar=no,overflow=auto," + "width=" + w_width + ",height=" + w_height + ",left=" + w_left + ",top=" + w_top;		window.open(sURL, sWName, sWFeature);
+      }
+
+		pgmDown = function(url) {
+			window.open(url, '');
+		};
+		
+		 function f_save(){
+			 var remark = $('[name=lec_remark]').val().replace(/\n/g, "<br>");
+			 var grade = $("[name=lec_grade]:checked").val();
+			 if(grade == null ){
+				 alert("평가 등급을 선택해주세요.");
+				 return false;
+			 }
+			 if((grade == "04" || grade == "05") && remark == ""){
+				 alert("평가 의견을 작성해주세요.");
+				 return false;
+			 }
+
+			 form = document.form_write;
+			 form.target = "hiddenifr" ;
+			 form.action = "lecsubjectPlanSave.jsp?year=2020&term=1R&dept_cd=5437&cour_cd=CYDF206&cour_cls=00&cour_nm=과목11(영강)&grad_cd=0136&languageDiv=ko&remark="+remark+"&grade="+grade;
+			 form.submit();    
+			 alert("저장되었습니다."); 
+		 }
+   </script>
+</head>
+<body>
+		<div class="sub_content">
+			<div class="top_page">
+	  			<h3>2020학년도 1학기 [ 과목11(영강) ] 강의계획안</h3>
+	  			<a href="#" class="close">&nbsp;</a>
+			</div>
+			<div class="page">
+				<form name="form1" method="post" action="lecsubjectPlanSave.jsp">	
+					<input type="hidden" name="jobmode" value="" />
+					<input type="hidden" name="languageDiv" value="ko" />
+					<input type="hidden" name="year" value="2020" />
+					<input type="hidden" name="term" value="1R" />
+					<input type="hidden" name="dept_cd" value="5437" />
+					<input type="hidden" name="cour_cd" value="CYDF206" />
+					<input type="hidden" name="grad_cd" value="0136" />
+					<input type="hidden" name="cour_cls" value="00" />
+					<input type="hidden" name="cour_nm" value="과목11(영강)" />
+					<input type="hidden" name="col_cd" value="5436" />
+				<div class="bottom_btns_right">
+					
+					
+					
+					<input type="button" value="목록" " title="목록" class="mbtn btnwhite" onclick="javascript:history.back();"/>
+					
+					<input type="button" value="출력 " title="출력" class="mbtn btnwhite" onclick="javascript:f_print();"/>
+					
+				</div>
+				<div class="notice_blk">
+					<div><p>강의계획안 내용이 없으면, 강의담당 교수님께 문의하시기 바랍니다.</p></div>
+				</div>
+				<br />
+				<span class="tit_redbullet">수업정보</span>
+				<table class="tbl_view">
+					<colgroup>
+						<col width="15%" />
+						<col width="35%" />
+						<col width="15%" />
+						<col width="35%" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>시간/강의실</th>
+							<td colspan="3">화(5) 미래융합 106호
+목(4-5) 미래융합 106호</td>
+						</tr>
+						<tr>
+							<th>학점</th>
+							<td>3</td>
+							<th>학수번호(분반)</th>
+							<td>CYDF206 ( 00 )</td>
+						</tr>
+						
+						<tr>
+							<th>이수구분</th>
+							<td colspan="3">전공필수</td>
+						</tr>
+											
+					</tbody>
+				</table>
+				
+				<span class="tit_redbullet">강의담당자 </span>
+				<div class="bottom_view">
+					<span class="photo">
+						
+						<img src="lecEmpPhoto.jsp?languageDiv=ko&Id=99999999" border=0 width="156" height="189">
+							
+						<div style="text-align:center; font-weight:bold;padding-top:5px;">담당교수</div>
+					</span>
+					<table class="tbl_view">
+						<colgroup>
+							<col width="15%" />
+							<col width="25%" />
+							<col width="15%" />
+							<col width="" />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>성명</th>
+								<td>테스트성명</td>
+								<th>소속</th>
+								<td>태스트학과</td>
+							</tr>
+							<tr>
+								<th>E-mail</th>
+								<td>test@email.com</td>
+								<th>Homepage</th>
+								<td></td>
+							</tr>
+							<tr>
+								<th>연구실호실</th>
+								<td>테스트연구실</td>
+								<th>연락처</th>
+								<td>테스트연락처</td>
+							</tr>
+							<tr>
+								<th>면담시간</th>
+								<td colspan="3"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<span class="tit_redbullet">조교정보 </span>
+				<table class="tbl_view">
+					<colgroup>
+						<col width="15%" />
+						<col width="25%" />
+						<col width="15%" />
+						<col width="" />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>성명</th>
+							<td></td>
+							<th>소속</th>
+							<td></td>
+						</tr>
+						<tr>
+							<th>E-mail</th>
+							<td colspan="3"></td>
+						</tr>
+						<tr>
+							<th>연구실</th>
+							<td></td>
+							<th>연락처</th>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				<br />
+				<h3>수업운영</h3>
+				<span class="tit_redbullet">수업방법 </span>
+				<table class="tbl_view">
+					<colgroup>
+						<col width="17%" />
+						<col width="16%" />
+						<col width="16%" />
+						<col width="16%" />
+						<col width="16%" />
+						<col width="16%" />
+					</colgroup>
+					<tbody>
+						
+						<tr>
+							<th rowspan="2">활동유형</th>
+							<td><input type="checkbox" value="0" checked disabled>강의</td>
+							<td><input type="checkbox" value="1"  disabled>발표</td>
+							<td><input type="checkbox" value="2"  disabled>토론</td>
+							<td><input type="checkbox" value="3"  disabled>실험</td>
+							<td><input type="checkbox" value="4" checked disabled>실습</td>
+						</tr>
+						<tr class="wborder">
+							<td><input type="checkbox" value="5"  disabled>협동학습</td>
+							<td><input type="checkbox" value="6"  disabled>개별지도</td>
+							<td><input type="checkbox" value="7"  disabled>집단지도</td>
+							<td><input type="checkbox" value="8"  disabled>퀴즈</td>
+							<td><input type="checkbox" value="9"  disabled>Q&A</td>
+						</tr>
+						<tr>
+							<th><b>출석확인자율화</b></th>
+							<td colspan="5">
+								<input type="radio" value="Y" name="ATTEND_FREE_YN" checked disabled> 예&nbsp;&nbsp;
+								<input type="radio" value="N" name="ATTEND_FREE_YN"  disabled> 아니오
+							</td>
+						</tr>
+						<tr>	
+							<th><b>무감독시험</b></th>
+							<td colspan="5">
+								<input type="radio" value="Y" name="NO_SUPERVISOR_YN"  disabled> 예&nbsp;&nbsp;
+								<input type="radio" value="N" name="NO_SUPERVISOR_YN" checked disabled> 아니오
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<span class="tit_redbullet">평가방법</span>
+				<table class="tbl_view">
+					<colgroup>
+						<col width="25%" />
+						<col width="75%" />
+					</colgroup>
+					<tbody>
+						
+						<tr>
+							
+							<th>과제</th>
+							<td colspan="3">20 점</td>
+						</tr>
+							
+							<th>실습</th>
+							<td colspan="3">30 점</td>
+						</tr>
+							 				
+						</tr>
+						
+							<th>중간고사</th>
+							<td colspan="3">30 점</td>
+						</tr>
+							
+							<th>기말고사</th>
+							<td colspan="3">20 점</td>
+						</tr>
+							
+						<tr>
+							
+							<th>합계</th>
+							<td colspan="3">100 점</td>
+							 				
+						</tr>
+						
+						 <tr>
+						 	<th>평가점수 공개여부</th>
+						 	<td colspan="3">공개</td>
+						 </tr>
+					</tbody>
+				</table>
+				<br/>
+						
+				
+				<span class="tit_redbullet">학습계획</span>
+		
+						
+				<table class="tbl_view">
+					<colspan>
+						<col width="20%" />
+						<col width="" />
+					</colspan>
+					<tbody>	
+						<tr>
+							<td colspan="2" class="aleft">
+								
+								▶ 첨부파일
+								<br />&nbsp;&nbsp;* 첨부파일이 직접 열리지 않는 경우는 로컬PC에 [저장]하신 후 열어보시기 바랍니다.
+	 							<br />&nbsp;&nbsp;* 첨부파일이 직접 열리도록 하려면 [제어판]->[폴더옵션]->[파일형식]에서 해당파일 확장자를 등록하고
+	 							<br />&nbsp;&nbsp;&nbsp;&nbsp;연결프로그램을 등록하십시오.
+								<br />&nbsp;&nbsp;* PC에 설치되어 있는 프로그램보다 상위버전에서 작성된 파일인 경우 열리지 않을 수 있습니다.
+								
+							</td>
+						</tr>	
+				
+						<tr>
+							<td>
+								<img src="./images/f_addfile.gif" border="0">
+							</td>
+							<td  style="border:none">
+								 <a href="/weblogic/filedownloader?filename=CYDF206%2800%29.pdf&filepath=%2Fsrc%2Fintr%2Fwebapp%2Ffiles%2Flec%2F20201R%2FCYDF206%2800%29.pdf">
+									<span class="title01">강의계획서 첨부문서</span>
+								</a>
+							</td>
+						</tr>
+				
+					</tbody>
+				</table>
+				
+				
+				</form>
+				<span class="tit_redbullet">장애학생조정사항</span>
+				<table class="tbl_view">
+					<tbody>
+						<tr>
+							<td>장애학생은 강의 수강 시 조정(강의자료 사전 제공, 과제 및 평가 조정, 과제 제출기간 연장, 시험시간 연장 등)을 원할 경우 개강 전 담당 교수님께 위와 같은 사항에 대한 사전 상담을 요청해 주시기 바랍니다.<br/>- 교원 가이드북 : <a href="http://ibook.korea.ac.kr/Viewer/kuprofessors" target="_blank">http://ibook.korea.ac.kr/Viewer/kuprofessors</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<form name="form_write" method="post" action="lecsubjectPlanSave.jsp">
+					
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<iframe id="hidden" name="hiddenifr"style="visibility:hidden;display:none"></iframe>
+</body>
+</html>
