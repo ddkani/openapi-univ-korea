@@ -1,0 +1,1 @@
+from .sugang import Colleage, Department, Course, CourseTimetable, Professor
