@@ -149,8 +149,8 @@ class SugangRequester(Session):
             'yy' : year,
             'tm' : term.value,
             'campus' : campus.value,
-            'colcd' : general_first_cd,
-            'deptcd' : general_second_cd
+            'col' : general_first_cd,
+            'dept' : general_second_cd
         }
 
         ret = self.post(url=URL_LEC_ETC_SUB, params=PARAMS_LANG, data=data).text

@@ -6,6 +6,7 @@ from kuapi.models.sugang import Professor
 from kuapi.enums.sugang import Campus, Term
 from kuapi.parsers.sugang import SugangParser
 from kuapi.requesters.sugang import SugangRequester
+from kuapi.clients.sugang import SugangClient
 
 log = logging.getLogger(__name__)
 
@@ -89,7 +90,7 @@ class SugangParserTestClass(TestCase):
         log.info('------------------------------------------------')
 
 
-    def test_parse_course(self):
+    def test_parse_course_list(self):
         ret = self.parser.parse_course(
             read_file('course.html')
         )
@@ -189,3 +190,26 @@ class SugangRequesterTestClass(TestCase):
             year=self.year, term=self.term, campus=self.campus,
             general_first_cd=self.general_first_cd, general_second_cd=self.general_second_cd
         )
+
+class SugangClientTestClass(TestCase):
+
+    client = None # type: SugangClient
+
+    year = 2020
+    term = Term.spring
+
+    def setUp(self) -> None:
+        self.client = SugangClient()
+
+    @classmethod
+    def setUpTestData(cls):
+        pass
+
+    def test_client_process_year(self):
+        self.client.process_each_year(self.year)
+
+    def test_client_process_general(self):
+        self.client.year = self.year
+        self.client.set_major_department_only()
+        self.client.process_major_each_term(term=self.term)
+        self.client.process_general_each_term(term=self.term)
