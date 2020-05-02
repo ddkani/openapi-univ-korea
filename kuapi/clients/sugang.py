@@ -1,18 +1,16 @@
 import logging
 
-from kuapi.enums.sugang import Term, Campus, Week, Complition
-from kuapi.models.sugang import Colleage, Department, Course, CourseTimetable, Professor
-
+from kuapi.builders.sugang import SugangBuilder
+from kuapi.enums.sugang import Term, Campus
+from kuapi.models.sugang import Colleage, Department
 from kuapi.parsers.sugang import SugangParser
 from kuapi.requesters.sugang import SugangRequester
-from kuapi.builders.sugang import SugangBuilder
 
 log = logging.getLogger(__name__)
 
 ## 수강신청 서비스 특성상 아랫 단계로 내려갈때마다 데이터를 가져와서 모두 저장하고,
 ## 상위 단계의 데이터가 필요한 상황이 많으므로 process 별로 설정해서 수집을 실시합니다.
 ## 즉 최상위 단계가 이는 특정 단계를 바로 시행하려면 client에 값 설정 후 수집해야 합니다.
-
 ## 수강신청코드가 특히 머리아픈게 파라메터도 너무많고 과정에 따라 넘길 코드도 서로 달라진다.
 
 # TODO: 클라이언트를 제외한 각 라이브러리가 Enum에만 의존성이 있게 / 의존성 전체 없이?
@@ -28,9 +26,6 @@ class SugangClient(SugangParser, SugangRequester):
     campus = None # type: Campus
     colleage = None # type: colleage
     department = None # type: department
-
-    general_first_cd = None # type: str
-    general_second_cd = None # type: str
 
     ## 년도 -> 학기를 선정하면 캠퍼스를 세팅해서 진행합니다.
 
@@ -48,6 +43,10 @@ class SugangClient(SugangParser, SugangRequester):
         """
         assert isinstance(year, int)
         self.year = year
+
+        for term in Term:
+            self.process_major_each_term(term=term)
+            self.process_general_each_term(term=term)
 
 
     def process_major_each_term(self, term: Term):
@@ -172,7 +171,7 @@ class SugangClient(SugangParser, SugangRequester):
 
         ## 사진 정보는 나중에 다운로드 받을 수 있도록 지원함.
         _professor = self.parse_professor(raw_html=_res)
-        professor = SugangBuilder.build_professor(**_professor)
+        SugangBuilder.build_professor(**_professor)
 
         log.debug("end fetch %s %s %s" % (name, cour_cd, cour_cls))
 
@@ -180,10 +179,57 @@ class SugangClient(SugangParser, SugangRequester):
     def process_general_each_term(self, term: Term):
         """
         year가 정해지고 term을 제공받아 캠퍼스별로 교양 정보를 수집합니다.
+        다음 단계 : process_general_each_gen
+
+        @param term 수강할 학기입니다.
         """
         assert isinstance(term, Term)
         self.term = term
 
+        for campus in Campus:
+            self.campus = campus
 
-    def process_general_each_gen(self, general_first_cd: str, general_second_cd: str):
-        pass
+            _first_cds = self.parse_general_first_cd_list(raw_html=self.request_general_first_cd_list())
+            for _first_cd in _first_cds:
+                _second_cds = list(self.parse_general_second_cd_list(
+                    raw_html=self.request_general_second_cd_list(general_first_cd=_first_cd)
+                ))
+                if not _second_cds:
+                    self.process_general_each_gen(
+                        general_first_cd=_first_cd
+                    )
+                else:
+                    for _second_cd in _second_cds:
+                        self.process_general_each_gen(
+                            general_first_cd=_first_cd, general_second_cd=_second_cd
+                        )
+
+
+    def process_general_each_gen(self, general_first_cd: str, general_second_cd:str=""):
+        """
+        year, term, campus 가 정해지고 각 교양 과목별로 강의 리스트를 요청합니다.
+        다음 단계: process_course_and_professor
+
+        @param general_first_cd 대단위 강좌 분류입니다.
+        @param general_second_cd 소단위 강좌 분류입니다.
+        """
+        assert isinstance(general_first_cd, str)
+        assert isinstance(general_second_cd, str)
+
+        _res = self.request_general_course_list(
+            year=self.year, campus=self.campus, term=self.term,
+            general_first_cd=general_first_cd, general_second_cd=general_second_cd
+        )
+        _courses = self.parse_course_list(raw_html=_res, is_general_doc=True)
+
+        for _course in _courses:
+            name = _course['name']
+            cour_cd = _course['cour_cd']
+            cour_cls = _course['cour_cls']
+            grad_cd = _course['grad_cd']
+            is_relative = _course['is_relative']
+            is_limited = _course['is_limited']
+            self.process_course_and_professor(
+                name=name, cour_cd=cour_cd, cour_cls=cour_cls, grad_cd=grad_cd,
+                is_limited=is_limited, is_relative=is_relative
+            )

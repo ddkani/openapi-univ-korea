@@ -1,7 +1,11 @@
 import logging
 
 from kuapi.models.sugang import Colleage, Department, CourseTimetable, Course, Professor
-from kuapi.enums.sugang import Term, Campus, Week, Complition
+from kuapi.enums.sugang import Term, Campus, Week
+
+
+# TODO: builder 코드는 모델을 별도로 생각하고, 업데이트가 일어날만한 파서의 코드 중심으로 모델생성을 다시작성.
+# 역시 Enum과 model에만 의존성을 부여하였음.
 
 log = logging.getLogger(__name__)
 
@@ -103,7 +107,6 @@ class SugangBuilder:
     @staticmethod
     def build_professor(prof_cd: int, department_name:str=None, image:bytes=None,
                         name:str=None, email:str=None, lab:str=None, phone:str=None, homepage:str=None):
-
         ## pass assertion
 
         professor, created = Professor.objects.update_or_create(
