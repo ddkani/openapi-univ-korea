@@ -2,6 +2,7 @@ from django.test import TestCase
 import logging
 import os
 
+from kuapi.models.sugang import Professor
 from kuapi.enums.sugang import Campus, Term
 from kuapi.parsers.sugang import SugangParser
 from kuapi.requesters.sugang import SugangRequester
@@ -13,6 +14,21 @@ def read_file(path: str):
     with open('%s/kuapi/testcase/%s' % (os.getcwd(), path), 'r', encoding='cp949') as f:
         return f.read()
 
+class SugangEtcTestClass(TestCase):
+    def setUp(self) -> None:
+        self.requester = SugangRequester()
+
+    @classmethod
+    def setUpTestData(cls):
+        pass
+
+    def test_etc(self):
+        professor, created = Professor.objects.update_or_create(
+            prof_cd=1234,
+            defaults={
+                'image' : None
+            }
+        )
 
 class SugangParserTestClass(TestCase):
     '''
@@ -52,7 +68,7 @@ class SugangParserTestClass(TestCase):
 
 
     def test_parse_major_course_list(self):
-        ret = list(self.parser.parse_courses(
+        ret = list(self.parser.parse_course_list(
             read_file('major_courses.html'), is_general_doc=False
         ))
 
@@ -63,7 +79,7 @@ class SugangParserTestClass(TestCase):
 
 
     def test_parse_general_course_list(self):
-        ret = list(self.parser.parse_courses(
+        ret = list(self.parser.parse_course_list(
             read_file('general_courses.html'), is_general_doc=True
         ))
 
@@ -71,6 +87,7 @@ class SugangParserTestClass(TestCase):
         assert ret[-1]['name'] == '1학년세미나Ⅰ 역사교육과' and ret[-1]['cour_cd'] == 'GEKS005'
         log.info('test_parse_general_courses test pass!\n')
         log.info('------------------------------------------------')
+
 
     def test_parse_course(self):
         ret = self.parser.parse_course(
@@ -93,26 +110,24 @@ class SugangParserTestClass(TestCase):
         log.info('------------------------------------------------')
 
 
-    def test_parse_general_first_type_list(self):
-        ret = list(self.parser.parse_general_first_type_list(
+    def test_parse_general_first_cd_list(self):
+        ret = list(self.parser.parse_general_first_cd_list(
             read_file('general_first_type.html')
         ))
 
         assert ret[0]['name'] == '교양' and ret[0]['general_first_cd'] == '01'
-        log.info('test_parse_general_first_type test pass!\n')
+        log.info('test_parse_general_first_cd test pass!\n')
         log.info('------------------------------------------------')
 
 
-    def test_parse_general_second_type_list(self):
-        ret = list(self.parser.parse_general_second_type_list(
+    def test_parse_general_second_cd_list(self):
+        ret = list(self.parser.parse_general_second_cd_list(
             read_file('general_second_type.html')
         ))
 
         assert ret[0]['name'] == '1학년세미나' and ret[0]['general_second_cd'] == '24'
-        log.info('test_parse_general_second_type test pass!\n')
+        log.info('test_parse_general_second_cd test pass!\n')
         log.info('------------------------------------------------')
-
-
 
 class SugangRequesterTestClass(TestCase):
     """
@@ -127,8 +142,9 @@ class SugangRequesterTestClass(TestCase):
     campus = Campus.sejong
     col_cd = '4460' # 과학기술대힉
     dept_cd = '5040' # 전자및정보공학과
+    grad_cd = '0136' # ??
     cour_cd = 'EIEN216' # 공업수학II(영강)
-    cour_cls = '02' # 2분
+    cour_cls = '02' # 2분반
 
     general_first_cd = '01' # 교양
     general_second_cd = '24' # 1학년세미나
@@ -158,15 +174,15 @@ class SugangRequesterTestClass(TestCase):
     def test_request_course_detail(self):
         self.requester.request_course_detail(
             year=self.year, term=self.term, col_cd=self.col_cd, dept_cd=self.dept_cd,
-            cour_cd=self.cour_cd, cour_cls=self.cour_cls
+            cour_cd=self.cour_cd, cour_cls=self.cour_cls, grad_cd=self.grad_cd
         )
 
-    def test_request_general_first_type_list(self):
-        self.requester.request_general_first_type_list()
+    def test_request_general_first_cd_list(self):
+        self.requester.request_general_first_cd_list()
 
 
-    def test_request_general_second_type_list(self):
-        self.requester.request_general_second_type_list(general_first_cd=self.general_first_cd)
+    def test_request_general_second_cd_list(self):
+        self.requester.request_general_second_cd_list(general_first_cd=self.general_first_cd)
 
     def test_request_general_course_list(self):
         self.requester.request_general_course_list(

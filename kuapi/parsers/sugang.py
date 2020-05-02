@@ -105,7 +105,7 @@ class SugangParser(HtmlParser):
             }
 
 
-    def parse_courses(self, raw_html: str, is_general_doc:bool) -> GeneratorType:
+    def parse_course_list(self, raw_html: str, is_general_doc:bool) -> GeneratorType:
         """
         강의 리스트를 파싱합니다.
 
@@ -131,19 +131,25 @@ class SugangParser(HtmlParser):
 
             # _campus = Campus.parse(tds[0].text).value
             # _cour_cd = tds[0].text.strip() # XPath("string()")
-            _cls = tds[1].text # 분반이 반드시 string이 아님.
+            _cls = tds[1].text.strip() # 분반이 반드시 string이 아님.
             ## 이수구분
+            # _complition_type = tds[2].text.strip()
             _name = tds[3].text_content().strip().replace('\n','').replace('\t','').replace('\xa0',' ')
             ## 교수이름 - 상세정보에서 가져오기 / parse:: 이름 명시하지 않으면 named에서 생략 가능.
             _score = parse("{time:w}(  {score:w})", tds[5].text.strip()).named['score']
             ## 강의시간 / 강의실 - 상세정보에서 가져오기
 
 
+            _is_relative = bool(tds[7].text)
+            _is_limited = bool(tds[8].text)
+
             ## 해당 기본정보가 있어야 강의 상세정보를 요청할 수 있습니다.
             result = {
                 'name' : _name,
                 'cls' : _cls,
-                'score' : _score
+                'score' : _score,
+                'is_relative' : _is_relative,
+                'is_limited' : _is_limited
             }
             result.update(basics)
             log.debug(result)
@@ -171,6 +177,9 @@ class SugangParser(HtmlParser):
                 _p = SugangRegexr.regex_course_timetable(_t)
                 if _p: timetables.append(_p) # if _p : 비어있는 투플도 성립
 
+        score = int(tds[1].text.strip())
+        complition_type = tds[3].text.strip()
+
         year = int(basics[2].value.strip())
         term = Term(basics[3].value.strip())
         dept_cd = basics[4].value.strip()
@@ -188,7 +197,9 @@ class SugangParser(HtmlParser):
             'grad_cd' : grad_cd, ## ?
             'cour_cls' : cour_cls,
             'name' : name,
+            'score' : score,
             'col_cd' : col_cd,
+            'complition_type' : complition_type,
             'timetables' : timetables
         }
         log.debug(ret)
@@ -233,7 +244,7 @@ class SugangParser(HtmlParser):
         log.debug(ret)
         return ret
 
-    def parse_general_first_type_list(self, raw_html: str) -> GeneratorType:
+    def parse_general_first_cd_list(self, raw_html: str) -> GeneratorType:
         """
         교양과목의 첫번째 분류를 파싱합니다.
         """
@@ -252,7 +263,7 @@ class SugangParser(HtmlParser):
             log.debug(ret)
             yield ret
 
-    def parse_general_second_type_list(self, raw_html: str) -> GeneratorType:
+    def parse_general_second_cd_list(self, raw_html: str) -> GeneratorType:
         """
         교양과목의 두번째 분류를 파싱합니다. (학과검색과 유사)
         """

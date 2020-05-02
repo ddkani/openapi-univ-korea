@@ -110,7 +110,7 @@ class SugangRequester(Session):
 
     # ------------
 
-    def request_general_first_type_list(self) -> str:
+    def request_general_first_cd_list(self) -> str:
         """
         교양과목 1단계 분류를 가져옵니다. 년도 / 캠퍼스 별로 구분이 없습니다.
         """
@@ -118,7 +118,7 @@ class SugangRequester(Session):
         return ret
 
 
-    def request_general_second_type_list(self, general_first_cd: str) -> str:
+    def request_general_second_cd_list(self, general_first_cd: str) -> str:
         """
         교양과목 2단계 분류를 가져옵니다. 년도 / 캠퍼스 별로 구분이 없습니다.
 
@@ -138,7 +138,7 @@ class SugangRequester(Session):
 
 
     def request_general_course_list(self, year: int, term: Term, campus: Campus, 
-                                    general_first_cd: str, general_second_cd: str) -> str:
+                                    general_first_cd: str, general_second_cd: str="") -> str:
         assert isinstance(year, int)
         assert isinstance(term, Term)
         assert isinstance(campus, Campus)
@@ -149,8 +149,8 @@ class SugangRequester(Session):
             'yy' : year,
             'tm' : term.value,
             'campus' : campus.value,
-            'col' : general_first_cd,
-            'dept' : general_second_cd
+            'colcd' : general_first_cd,
+            'deptcd' : general_second_cd
         }
 
         ret = self.post(url=URL_LEC_ETC_SUB, params=PARAMS_LANG, data=data).text
@@ -159,7 +159,7 @@ class SugangRequester(Session):
     # ------------
 
     def request_course_detail(self, year: int, term: Term, col_cd: str, dept_cd: str, cour_cd: str,
-                              cour_cls: str) -> str:
+                              cour_cls: str, grad_cd: str) -> str:
         """
         과목의 세부 정보를 요청합니다.
 
@@ -176,9 +176,10 @@ class SugangRequester(Session):
         assert isinstance(dept_cd, str)
         assert isinstance(cour_cd, str)
         assert isinstance(cour_cls, str)
+        assert isinstance(grad_cd, str)
 
         data = {
-            'grad_cd': DEFAULT_GRAD_CD,  # TODO: Unknown
+            'grad_cd': grad_cd,
             'year': year,
             'term': term.value,
             'col_cd': col_cd,

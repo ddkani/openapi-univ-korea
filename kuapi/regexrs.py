@@ -58,7 +58,7 @@ class SugangRegexr:
 
         def build_time(t: str):
             _t = t.split('-')
-            return (int(_t[0]), int(_t[0])) if len(_t) is 1 else (int(_t[0]), int(_t[1]))
+            return (int(_t[0]), int(_t[0])) if len(_t) == 1 else (int(_t[0]), int(_t[1]))
 
         match = rg_lecture_time_location.match(raw)
         if match is None:
