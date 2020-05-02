@@ -5,10 +5,11 @@ from django.db.models import Model, CASCADE
 from django.db.models import ForeignKey
 from django.db.models import OneToOneField
 from django.db.models import \
-    CharField, SmallIntegerField, UUIDField, IntegerField, EmailField, AutoField, BigAutoField, TextField
+    CharField, SmallIntegerField, UUIDField, IntegerField, EmailField, AutoField, BigAutoField, TextField, \
+    BinaryField
 
 from kuapi.enums.sugang import Campus, Term, Week
-from kuapi.config import MAX_LEN_DEFFIELD, MAX_LEN_MIDFIELD, MAX_LEN_SMFIELD
+from kuapi.config import MAX_LEN_DEFFIELD, MAX_LEN_MIDFIELD, MAX_LEN_SMFIELD, MAX_IMAGE_SIZE
 
 # django.models.signal => 작업 전 / 작업 후 경과를 보고. 여기서 작업을 중지 할 수 없음.
 # create / save 등 매서드 재정의 => 작업을 수행하기 전 검증하고, 중지할 수 있음.
@@ -67,8 +68,8 @@ class Colleage(Model):
 class Department(IdModelMixin, Model):
 
     colleage = ForeignKey(Colleage, null=False,
-                          related_name='departments', on_delete=CASCADE
-                          )
+        related_name='departments', on_delete=CASCADE
+    )
 
     dept_cd = CharField(
         null=True, max_length=MAX_LEN_SMFIELD  # nnnn
@@ -110,13 +111,15 @@ class Professor(IdModelMixin, Model):
         null=True, unique=True,
     )
 
-    department = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
+    department_name = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
 
-    name = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
+    name = CharField(null=False, max_length=MAX_LEN_MIDFIELD)
     email = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
     lab = CharField(null=True, max_length=MAX_LEN_DEFFIELD)
     phone = CharField(null=True, max_length=MAX_LEN_DEFFIELD)
     homepage = TextField(null=True)
+
+    image = BinaryField(null=True, editable=True, max_length=MAX_IMAGE_SIZE)
 
     # 면담시간 -> 필요할까?
     # meeting_time = CharField(max_length=MAX_CHAR_MIDFIELD)
@@ -127,6 +130,9 @@ class Professor(IdModelMixin, Model):
     해당 이름을 출력해주면 좋겠다.
     => 추후 성적조회 서비스
     """
+
+    def __str__(self):
+        return "%s: %s[%s]" % (self.prof_cd, self.name, self.department_name)
 
 
 ## TODO: Course / cls -> 별도의 테이블이 아닌 하나로 확장
@@ -141,10 +147,14 @@ class Course(IdModelMixin, Model):
     cour_cd = CharField(  # 학수번호
         null=True, max_length=MAX_LEN_SMFIELD
     )
-    cls = SmallIntegerField(null=True)  # 분반 실제번호
+    cour_cls = CharField(null=False, max_length=2)  # 분반 실제번호
 
     name = CharField(
         null=True, max_length=MAX_LEN_DEFFIELD
+    )
+
+    grad_cd = CharField( # unknown field
+        null=True, max_length=MAX_LEN_SMFIELD
     )
 
     professor = ForeignKey(Professor, null=True,
@@ -186,7 +196,7 @@ class Course(IdModelMixin, Model):
 
     def __str__(self):
         return "[%s-%s] %s" % (
-            self.cour_cd, self.cls, self.name
+            self.cour_cd, self.cour_cls, self.name
         )
 
 
@@ -205,7 +215,11 @@ class CourseTimetable(IdModelMixin, Model):
     # TODO: 클라이언트 상에서 보기 쉽게 변환은 Serializer에서 작성하도록 합니다.
     time_start = SmallIntegerField(null=True)
     time_end = SmallIntegerField(null=True)
+    duration = SmallIntegerField(null=True)
 
     # TODO: 시간표 시간 실제시간으로 변환하여 혼용(멀티캠퍼스 지원)대비 -> 추후작성예정!
 
     location = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
+
+    def __str__(self):
+        return '%s_%s[%s-%s]' % (self.course.name, self.weekend, self.time_start, self.time_end)

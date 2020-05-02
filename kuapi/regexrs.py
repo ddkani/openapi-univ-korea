@@ -10,16 +10,46 @@ log = logging.getLogger(__name__)
 
 ## -----------------------------------------------------------------
 
+RG_DEPARTMENTS = r'el\.style\.color = "black";\s*el.selected = .+?;\s*el\.value ="(.+?)";\s*el.text = "(.+?)";'
+RG_GENERAL_TYPES = r'el\.style\.color = "black";\s*el\.value ="(.+?)";\s*el.text = "(.+?)";'
 RG_LECTURE_TIME_LOCATION = r"([월화수목금])\((.+?)\)\s(.+?)$"
 
 ## -----------------------------------------------------------------
 
 rg_lecture_time_location = re.compile(RG_LECTURE_TIME_LOCATION)
-
-
+rg_departments = re.compile(RG_DEPARTMENTS)
+rg_general_types = re.compile(RG_GENERAL_TYPES)
 
 
 class SugangRegexr:
+
+    @staticmethod
+    def regex_departments(raw: str) -> list:
+        assert isinstance(raw, str)
+        assert raw != ""
+
+        match = rg_departments.findall(raw)
+        if match is None:
+            _message = 'regex_departments not match : %s' % raw
+            log.warning(_message)
+            return []
+
+        return match
+
+
+    @staticmethod
+    def regex_general_types(raw: str) -> list:
+        assert isinstance(raw, str)
+        assert raw != ""
+
+        match = rg_general_types.findall(raw)
+        if match is None:
+            _message = 'regex_general_types not match : %s' % raw
+            log.warning(_message)
+            return []
+
+        return match
+
 
     @staticmethod
     def regex_course_timetable(raw: str) -> tuple:
@@ -28,12 +58,12 @@ class SugangRegexr:
 
         def build_time(t: str):
             _t = t.split('-')
-            return (int(_t[0]), int(_t[0])) if len(_t) is 1 else (int(_t[0]), int(_t[1]))
+            return (int(_t[0]), int(_t[0])) if len(_t) == 1 else (int(_t[0]), int(_t[1]))
 
         match = rg_lecture_time_location.match(raw)
         if match is None:
             log.warning('regex_course_timetable error : %s' % raw)
-            return None
+            return tuple()
 
         groups = match.groups()
 

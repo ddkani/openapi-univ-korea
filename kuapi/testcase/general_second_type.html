@@ -1,0 +1,348 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>고려대학교 수강신청 시스템</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+
+<script>
+	function fnc(){
+		obj = parent.ILec.document.frm_ets.dept;
+		cnt = obj.length;
+		
+		for(i=0;i<cnt;i++){
+			obj.remove(0);
+		}
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="24";
+            el.text = "1학년세미나";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="23";
+            el.text = "ACADEMIC ENGLISH";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="41";
+            el.text = "RC프로그램";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="16";
+            el.text = "과학과기술";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="10";
+            el.text = "군사학";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="44";
+            el.text = "글쓰기";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="13";
+            el.text = "문학과예술";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="22";
+            el.text = "사고와표현";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="15";
+            el.text = "사회의이해";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="32";
+            el.text = "선택교양";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="11";
+            el.text = "세계의문화";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="21";
+            el.text = "신입생강좌";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="37";
+            el.text = "실용외국어";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="39";
+            el.text = "심층외국어";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="12";
+            el.text = "역사의탐구";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="14";
+            el.text = "윤리와사상";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="43";
+            el.text = "자유정의진리";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="31";
+            el.text = "전공관련교양";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="35";
+            el.text = "전공관련교양(전공외국어)";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="34";
+            el.text = "전공관련교양(전공탐색)";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="33";
+            el.text = "전공관련교양(제2외국어)";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="17";
+            el.text = "정량적사고";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="42";
+            el.text = "정보적사고";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "black";
+            el.value ="38";
+            el.text = "통합영어";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="03";
+            el.text = "과학의기초";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="06";
+            el.text = "국어와작문";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="09";
+            el.text = "수리";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="01";
+            el.text = "인간과문화";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="02";
+            el.text = "인간과사회";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="05";
+            el.text = "자유교양";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="40";
+            el.text = "전공관련교양(고급영어)";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="36";
+            el.text = "전공관련교양(영문강독)";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="04";
+            el.text = "정보화사회";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="07";
+            el.text = "제1외국어";
+            obj.options.add(el);
+
+            el = parent.ILec.document.createElement("OPTION");
+			el.selected = "";  
+
+			//사용하지 않는 교양 빨강색으로 표시 2008.11.27    
+			el.style.color = "red";
+            el.value ="08";
+            el.text = "제2외국어";
+            obj.options.add(el);
+
+        	obj.style.visibility = "";
+        	obj.style.position = "";
+
+		location.replace("/blank.jsp");
+	}
+</script>
+
+</head>
+<body onload="fnc();">
+<center>검색중입니다.</center>
+</body>
+</html>
+
