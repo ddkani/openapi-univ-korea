@@ -141,7 +141,7 @@ class Course(IdModelMixin, Model):
     cour_cd = CharField(  # 학수번호
         null=True, max_length=MAX_LEN_SMFIELD
     )
-    cls = SmallIntegerField(null=True)  # 분반 실제번호
+    cls = CharField(null=False, max_length=2)  # 분반 실제번호
 
     name = CharField(
         null=True, max_length=MAX_LEN_DEFFIELD

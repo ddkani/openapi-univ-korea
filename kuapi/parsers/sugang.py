@@ -6,6 +6,7 @@ from parse import parse, search, findall
 
 from types import GeneratorType
 
+from kuapi.miscs import extract_query_from_url
 from kuapi.enums.sugang import Campus, Term, Week
 from kuapi.regexrs import SugangRegexr
 from kuapi.miscs import satinize
@@ -15,7 +16,7 @@ log = logging.getLogger(__name__)
 
 
 # Warning: support from 3.8 - typeddict
-
+# Warning: yield 기반 함수가 아무것도 하지 않을 경우, list(func()) 는 오류입니다.
 
 
 class HtmlParser:
@@ -48,8 +49,11 @@ class SugangParser(HtmlParser):
         assert raw_html != ""
         tree = self.init_tree(raw_html)
 
+        colleages = tree.xpath("//select[@name = 'col' and @id='col']//option[position() > 1]")
+        if not colleages:
+            yield from []
 
-        for _opt in tree.xpath("//select[@name = 'col' and @id='col']//option[position() > 1]"): # type: HtmlElement
+        for _opt in colleages: # type: HtmlElement
             _name = _opt.text_content()
             _col_cd = _opt.attrib['value']
 
@@ -68,62 +72,88 @@ class SugangParser(HtmlParser):
         """
         assert raw_html != ""
 
-        _cds = list(findall('el.value ="{:w}"', raw_html))
-        _names = list(findall('el.text = "{:w}"', raw_html))
+        ## parser => regex 기존 코드 이용
+        # 사유: 사용하지 않는 학과는 빨강색으로 표시
 
-        assert len(_cds) == len(_names) # 갯수가 다를경우 오류
-        assert _cds and _names # 존재하지 않을 경우 오류
+        # _cds = list(findall('el.value ="{:w}"', raw_html))
+        # _names = list(findall('el.text = "{:w}"', raw_html))
+        #
+        # assert len(_cds) == len(_names) # 갯수가 다를경우 오류
+        # assert _cds and _names # 존재하지 않을 경우 오류
 
-        for _i in range(len(_cds)):
-            _name = _names[_i].fixed[0].strip()
-            _dept_cd = _cds[_i].fixed[0].strip()
+        # for _i in range(len(_cds)):
+        #     _name = _names[_i].fixed[0].strip()
+        #     _dept_cd = _cds[_i].fixed[0].strip()
+        #
+        #     log.debug("name=%s, dept_cd=%s" % (_name, _dept_cd))
 
-            log.debug("name=%s, dept_cd=%s" % (_name, _dept_cd))
+        departments = SugangRegexr.regex_departments(raw_html)
+        if not departments:
+            yield from [] # department 없는 경우 대응
+
+        # 결과가 없으면 이 문장은 자동으로 넘어가므로 굳이 if 문이 필요 없다.
+        for d in departments:
+
+            dept_cd = d[0].strip()
+            name = d[1].strip()
+
+            log.debug("name=%s, dept_cd=%s" % (name, dept_cd))
 
             yield {
-                'dept_cd' : _dept_cd,
-                'name' : _name
+                'dept_cd' : dept_cd,
+                'name' : name
             }
 
 
-    def parse_courses(self, raw_html: str) -> GeneratorType:
+    def parse_courses(self, raw_html: str, is_general_doc:bool) -> GeneratorType:
         """
         강의 리스트를 파싱합니다.
 
         @param raw_html sugang.korea.ac.kr/lecture/LecMajorSub.jsp
+        @param is_general_doc 강의리스트가 교양 페이지인지 확인합니다.
         """
 
         assert raw_html != ""
+        assert isinstance(is_general_doc, bool)
+        
         tree = self.init_tree(raw_html)
 
+        lectures = tree.xpath("//tr[position() > 1]")
+        if not lectures:
+            yield from []
+
         # 첫번째 테이블은 자료 주석이므로 실행하지 않음.
-        for _lec in tree.xpath("//tr[position() > 1]"):
-            tds = _lec.xpath(".//td")
+        for _lec in lectures:
+            tds = _lec.xpath(".//td" if is_general_doc else ".//td[position() > 1]")
+
+            _url = tds[0].xpath("./a")[0].attrib['href']
+            basics = extract_query_from_url(_url, ('term', 'grad_cd', 'dept_cd', 'cour_cd'))
 
             # _campus = Campus.parse(tds[0].text).value
-            _cour_cd = tds[1].text_content().strip() # XPath("string()")
-            _cls = int(tds[2].text)
+            # _cour_cd = tds[0].text.strip() # XPath("string()")
+            _cls = tds[1].text # 분반이 반드시 string이 아님.
             ## 이수구분
-            _name = tds[4].text.strip()
+            _name = tds[3].text_content().strip().replace('\n','').replace('\t','').replace('\xa0',' ')
             ## 교수이름 - 상세정보에서 가져오기 / parse:: 이름 명시하지 않으면 named에서 생략 가능.
-            _score = parse("{time:w}(  {score:w})", tds[6].text.strip()).named['score']
+            _score = parse("{time:w}(  {score:w})", tds[5].text.strip()).named['score']
             ## 강의시간 / 강의실 - 상세정보에서 가져오기
 
-            log.debug("name=%s, cour_cd=%s, cls=%s, score=%s" % (
-                _name, _cour_cd, _cls, _score
-            ))
 
-            yield {
+            ## 해당 기본정보가 있어야 강의 상세정보를 요청할 수 있습니다.
+            result = {
                 'name' : _name,
-                'cour_cd' : _cour_cd,
                 'cls' : _cls,
                 'score' : _score
             }
+            result.update(basics)
+            log.debug(result)
+
+            yield result
 
 
     def parse_course(self, raw_html: str) -> dict:
         """
-        강의 상세정보를 파싱합니다.
+        강의 상세정보를 파싱합니다. (교양 / 전공과목 모두 동일합니다.)
 
         @param raw_html infodepot.korea.ac.kr/lecture1/lecsubjectPlanView.jsp
         """
@@ -139,7 +169,7 @@ class SugangParser(HtmlParser):
         if _time:
             for _t in _time.split('\n'):
                 _p = SugangRegexr.regex_course_timetable(_t)
-                if _p: timetables.append(_p)
+                if _p: timetables.append(_p) # if _p : 비어있는 투플도 성립
 
         year = int(basics[2].value.strip())
         term = Term(basics[3].value.strip())
@@ -202,3 +232,44 @@ class SugangParser(HtmlParser):
 
         log.debug(ret)
         return ret
+
+    def parse_general_first_type_list(self, raw_html: str) -> GeneratorType:
+        """
+        교양과목의 첫번째 분류를 파싱합니다.
+        """
+        assert raw_html != ""
+        tree = self.init_tree(raw_html)
+
+        options = tree.xpath('//select[@name="col"]/option')
+        if not options:
+            yield from []
+
+        for op in options:
+            ret = {
+                'name' : op.text.strip(),
+                'general_first_cd' : op.attrib['value'].strip()
+            }
+            log.debug(ret)
+            yield ret
+
+    def parse_general_second_type_list(self, raw_html: str) -> GeneratorType:
+        """
+        교양과목의 두번째 분류를 파싱합니다. (학과검색과 유사)
+        """
+
+        generals = SugangRegexr.regex_general_types(raw_html)
+        if not generals:
+            yield from []  # generals 없는 경우 대응
+
+        # 결과가 없으면 이 문장은 자동으로 넘어가므로 굳이 if 문이 필요 없다.
+        for d in generals:
+            general_second_cd = d[0].strip()
+            name = d[1].strip()
+
+            log.debug("name=%s, general_second_cd=%s" % (name, general_second_cd))
+
+            yield {
+                'general_second_cd': general_second_cd,
+                'name': name
+            }
+
