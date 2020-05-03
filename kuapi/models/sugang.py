@@ -1,14 +1,11 @@
-from datetime import datetime
-
 from django.db.models import Model, CASCADE
 
 from django.db.models import ForeignKey
-from django.db.models import OneToOneField
 from django.db.models import \
-    CharField, SmallIntegerField, UUIDField, IntegerField, EmailField, AutoField, BigAutoField, TextField, \
-    BinaryField
+    CharField, SmallIntegerField, IntegerField, BigAutoField, TextField, \
+    BinaryField, DecimalField
 
-from kuapi.enums.sugang import Campus, Term, Week
+from kuapi.enums import Campus, Term, Week
 from kuapi.config import MAX_LEN_DEFFIELD, MAX_LEN_MIDFIELD, MAX_LEN_SMFIELD, MAX_IMAGE_SIZE
 
 # django.models.signal => 작업 전 / 작업 후 경과를 보고. 여기서 작업을 중지 할 수 없음.
@@ -117,6 +114,7 @@ class Professor(IdModelMixin, Model):
     email = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
     lab = CharField(null=True, max_length=MAX_LEN_DEFFIELD)
     phone = CharField(null=True, max_length=MAX_LEN_DEFFIELD)
+    meeting = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
     homepage = TextField(null=True)
 
     image = BinaryField(null=True, editable=True, max_length=MAX_IMAGE_SIZE)
@@ -161,7 +159,8 @@ class Course(IdModelMixin, Model):
                            related_name='professor', on_delete=CASCADE,
                            )
 
-    score = SmallIntegerField(null=True)  # 학점
+    # 소숫점 1자리까지. 최대 18학점.
+    score = DecimalField(null=True, max_digits=3, decimal_places=1)
 
     # 정확한 코드의 테이블을 찾을 수 없으므로 우선 charfield로 대체합니다.
     complition_type = CharField(null=True, max_length=MAX_LEN_SMFIELD)  # 이수구분
@@ -222,4 +221,4 @@ class CourseTimetable(IdModelMixin, Model):
     location = CharField(null=True, max_length=MAX_LEN_MIDFIELD)
 
     def __str__(self):
-        return '%s_%s[%s-%s]' % (self.course.name, self.weekend, self.time_start, self.time_end)
+        return '%s_%s[%s-%s] - %s' % (self.course.name, self.weekend, self.time_start, self.time_end, self.location)

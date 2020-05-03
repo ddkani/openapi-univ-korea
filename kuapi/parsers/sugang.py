@@ -2,12 +2,12 @@ import logging
 
 import lxml.html
 from lxml.html import HtmlElement
-from parse import parse, search, findall
+from parse import parse, search
 
 from types import GeneratorType
 
 from kuapi.miscs import extract_query_from_url
-from kuapi.enums.sugang import Campus, Term, Week
+from kuapi.enums import Term
 from kuapi.regexrs import SugangRegexr
 from kuapi.miscs import satinize
 
@@ -118,7 +118,7 @@ class SugangParser(HtmlParser):
         
         tree = self.init_tree(raw_html)
 
-        lectures = tree.xpath("//tr[position() > 1]")
+        lectures = tree.xpath("//table/tbody/tr")
         if not lectures:
             yield from []
 
@@ -127,18 +127,22 @@ class SugangParser(HtmlParser):
             tds = _lec.xpath(".//td" if is_general_doc else ".//td[position() > 1]")
 
             _url = tds[0].xpath("./a")[0].attrib['href']
-            basics = extract_query_from_url(_url, ('term', 'grad_cd', 'dept_cd', 'cour_cd'))
+            basics = extract_query_from_url(
+                _url, ('term', 'grad_cd', 'dept_cd', 'cour_cd', 'cour_cls', 'cour_nm')
+            )
 
             # _campus = Campus.parse(tds[0].text).value
             # _cour_cd = tds[0].text.strip() # XPath("string()")
             _cls = tds[1].text.strip() # 분반이 반드시 string이 아님.
             ## 이수구분
             # _complition_type = tds[2].text.strip()
-            _name = tds[3].text_content().strip().replace('\n','').replace('\t','').replace('\xa0',' ')
+            # _name = tds[3].text_content().strip().replace('\n','').replace('\t','').replace('\xa0',' ')
             ## 교수이름 - 상세정보에서 가져오기 / parse:: 이름 명시하지 않으면 named에서 생략 가능.
-            _score = parse("{time:w}(  {score:w})", tds[5].text.strip()).named['score']
+            _score_p = parse("{time:w}(  {score:w})", tds[5].text.strip())
+            # _score = int(_score_p.named['score']) if _score_p else 0
             ## 강의시간 / 강의실 - 상세정보에서 가져오기
 
+            _name = basics.pop('cour_nm')
 
             _is_relative = bool(tds[7].text)
             _is_limited = bool(tds[8].text)
@@ -147,7 +151,7 @@ class SugangParser(HtmlParser):
             result = {
                 'name' : _name,
                 'cls' : _cls,
-                'score' : _score,
+                # 'score' : _score, # 세부정보에서 사용함
                 'is_relative' : _is_relative,
                 'is_limited' : _is_limited
             }
@@ -174,10 +178,13 @@ class SugangParser(HtmlParser):
 
         if _time:
             for _t in _time.split('\n'):
-                _p = SugangRegexr.regex_course_timetable(_t)
+                _p = SugangRegexr.regex_course_timetable(_t.strip())
                 if _p: timetables.append(_p) # if _p : 비어있는 투플도 성립
 
-        score = int(tds[1].text.strip())
+        # 일부 의대수업은 소숫점을 허용하는 경우가 있다. (@_@)
+        _score = tds[1].text.strip() # type: str
+        score = float(_score) if _score.isdecimal() else float(0)
+
         complition_type = tds[3].text.strip()
 
         year = int(basics[2].value.strip())
@@ -185,7 +192,7 @@ class SugangParser(HtmlParser):
         dept_cd = basics[4].value.strip()
         cour_cd = basics[5].value.strip()
         grad_cd = basics[6].value.strip()
-        cour_cls = int(basics[7].value)
+        cour_cls = basics[7].value.strip() # 분반이 영어인 경우가 존재함.
         name = basics[8].value.strip()
         col_cd = basics[9].value.strip()
 
@@ -226,7 +233,7 @@ class SugangParser(HtmlParser):
         email = satinize(tds[2].text)
         homepage = satinize(tds[3].text)
         lab = satinize(tds[4].text)
-        tel = satinize(tds[5].text)
+        phone = satinize(tds[5].text)
         meeting = satinize(tds[6].text)
 
         ret = {
@@ -237,8 +244,8 @@ class SugangParser(HtmlParser):
             'email' : email,
             'homepage' : homepage,
             'lab' : lab,
-            'tel' : tel,
-            'metting' : meeting
+            'phone' : phone,
+            'meeting' : meeting
         }
 
         log.debug(ret)

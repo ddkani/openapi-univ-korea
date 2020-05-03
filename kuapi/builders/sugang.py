@@ -1,7 +1,7 @@
 import logging
 
 from kuapi.models.sugang import Colleage, Department, CourseTimetable, Course, Professor
-from kuapi.enums.sugang import Term, Campus, Week
+from kuapi.enums import Term, Campus, Week
 
 
 # TODO: builder 코드는 모델을 별도로 생각하고, 업데이트가 일어날만한 파서의 코드 중심으로 모델생성을 다시작성.
@@ -45,7 +45,7 @@ class SugangBuilder:
 
 
     @staticmethod
-    def build_course(department: Department, cour_cd: str, cour_cls: str, name: str, score: int,
+    def build_course(department: Department, cour_cd: str, cour_cls: str, name: str, score: float,
                      complition_type: str, is_relative: bool, is_limited: bool, grad_cd: str,
                      professor: Professor=None):
 
@@ -53,7 +53,7 @@ class SugangBuilder:
         assert isinstance(cour_cd, str)
         assert isinstance(name, str)
         assert not professor or isinstance(professor, Professor)
-        assert isinstance(score, int)
+        assert isinstance(score, float)
         assert isinstance(complition_type, str)
         assert isinstance(is_relative, bool)
         assert isinstance(is_limited, bool)
@@ -80,7 +80,7 @@ class SugangBuilder:
     @staticmethod
     def build_course_timetable(course: Course, timetable_meta: tuple):
         assert isinstance(course, Course)
-        assert isinstance(timetable_meta, list)
+        assert isinstance(timetable_meta, tuple)
 
         week = timetable_meta[0]
         start = timetable_meta[1][0]
@@ -89,7 +89,7 @@ class SugangBuilder:
 
         assert isinstance(week, Week)
         assert isinstance(start, int) and isinstance(end, int)
-        assert isinstance(location, str)
+        assert not location or isinstance(location, str)
 
         ## each timetable
         ## Week, (start, end), 수업위치
@@ -106,7 +106,8 @@ class SugangBuilder:
 
     @staticmethod
     def build_professor(prof_cd: int, department_name:str=None, image:bytes=None,
-                        name:str=None, email:str=None, lab:str=None, phone:str=None, homepage:str=None):
+                        name:str=None, email:str=None, lab:str=None, phone:str=None,
+                        homepage:str=None, meeting:str=None):
         ## pass assertion
 
         professor, created = Professor.objects.update_or_create(
@@ -118,6 +119,7 @@ class SugangBuilder:
                 'email' : email,
                 'lab' : lab,
                 'phone' : phone,
+                'meeting' : meeting,
                 'homepage' : homepage
             }
         )

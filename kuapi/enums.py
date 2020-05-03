@@ -7,6 +7,8 @@ from enum import Enum
 # peek EnumClass(value)
 # parse 특정 사이트에서 가져온 값을 enum으로 변환
 
+## 2020. 05. 04 enum 객체 통합
+# 본래 다른 모듈과 같이 나누었으나 공통으로 사용하는 객체가 있어 통합함.
 
 class Campus(Enum):
     """
@@ -92,3 +94,11 @@ class Week(Enum):
 class Complition(Enum):
     # 다 정리된 파일이 있었는데 어디 갔더라...
     pass
+
+class Sex(Enum):
+    """
+    성별 구분
+    """
+
+    man = 1
+    woman = 2

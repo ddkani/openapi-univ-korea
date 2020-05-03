@@ -1,7 +1,7 @@
 import re
 import logging
 
-from kuapi.enums.sugang import Week
+from kuapi.enums import Week
 
 ## regex 로 처리해야하는 데이터가 많을 경우, 파일의 효용성을 위해 별도로 분리하였음.
 ## 또한 regex expression 을 경우에 따라 컴파일하여 쓰는것이 바람직함.
@@ -13,10 +13,12 @@ log = logging.getLogger(__name__)
 RG_DEPARTMENTS = r'el\.style\.color = "black";\s*el.selected = .+?;\s*el\.value ="(.+?)";\s*el.text = "(.+?)";'
 RG_GENERAL_TYPES = r'el\.style\.color = "black";\s*el\.value ="(.+?)";\s*el.text = "(.+?)";'
 RG_LECTURE_TIME_LOCATION = r"([월화수목금])\((.+?)\)\s(.+?)$"
+RG_LECTURE_TIME_LOCATION_2 = r"([월화수목금])\((.+?)\)"
 
 ## -----------------------------------------------------------------
 
 rg_lecture_time_location = re.compile(RG_LECTURE_TIME_LOCATION)
+rg_lecture_time_location2 = re.compile(RG_LECTURE_TIME_LOCATION_2)
 rg_departments = re.compile(RG_DEPARTMENTS)
 rg_general_types = re.compile(RG_GENERAL_TYPES)
 
@@ -56,27 +58,32 @@ class SugangRegexr:
         assert isinstance(raw, str)
         assert raw != ""
 
+        if raw == '미정':
+            return tuple()
+
         def build_time(t: str):
             _t = t.split('-')
             return (int(_t[0]), int(_t[0])) if len(_t) == 1 else (int(_t[0]), int(_t[1]))
 
-        match = rg_lecture_time_location.match(raw)
-        if match is None:
+        _match_1 = rg_lecture_time_location.match(raw)
+        _match_2 = rg_lecture_time_location2.match(raw)
+
+        if not _match_1 and not _match_2:
             log.warning('regex_course_timetable error : %s' % raw)
             return tuple()
 
-        groups = match.groups()
-
-        # match 1 " ([월화수목금])\((.+?)\)\s(.+?)$ "
-        if groups[0] is not None:
+        # match 1 "([월화수목금])\((.+?)\)\s(.+?)$ "
+        if _match_1:
+            groups = _match_1.groups()
             week = Week(groups[0])
             time = build_time(groups[1])
             loc = groups[2]
 
-        # match 2 " ([월화수목금])\((.+?)\) "
+        # match 2 "([월화수목금])\((.+?)\)"
         else:
-            week = Week(groups[3])
-            time = build_time(groups[4])
+            groups = _match_2.groups()
+            week = Week(groups[0])
+            time = build_time(groups[1])
             loc = None
 
         return week, time, loc

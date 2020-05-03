@@ -1,7 +1,7 @@
 import logging
 
 from kuapi.builders.sugang import SugangBuilder
-from kuapi.enums.sugang import Term, Campus
+from kuapi.enums import Term, Campus
 from kuapi.models.sugang import Colleage, Department
 from kuapi.parsers.sugang import SugangParser
 from kuapi.requesters.sugang import SugangRequester
@@ -20,6 +20,9 @@ class SugangClient(SugangParser, SugangRequester):
     교내 수업 시간표 관리자 클라이언트입니다.
     """
 
+    setup_major_department_only = None # type: bool
+    "설정하면 전공 검색에서 학과 정보만을 수집합니다."
+
     year = None  # type: int
     term = None  # type: Term
 
@@ -29,9 +32,13 @@ class SugangClient(SugangParser, SugangRequester):
 
     ## 년도 -> 학기를 선정하면 캠퍼스를 세팅해서 진행합니다.
 
+    def set_major_department_only(self):
+        self.setup_major_department_only = True
+
     def __init__(self):
-        super(SugangRequester).__init__()
-        super(SugangRequester).__init__()
+        super(SugangRequester, self).__init__()
+        super(SugangRequester, self).__init__()
+        self.setup_major_department_only = False
 
 
     def process_each_year(self, year: int):
@@ -93,7 +100,8 @@ class SugangClient(SugangParser, SugangRequester):
             department = SugangBuilder.build_department(
                 colleage=colleage, **_department
             )
-            self.process_major_each_department(department=department)
+            if not self.setup_major_department_only:
+                self.process_major_each_department(department=department)
 
 
     def process_major_each_department(self, department: Department):
@@ -171,7 +179,11 @@ class SugangClient(SugangParser, SugangRequester):
 
         ## 사진 정보는 나중에 다운로드 받을 수 있도록 지원함.
         _professor = self.parse_professor(raw_html=_res)
-        SugangBuilder.build_professor(**_professor)
+        _professor.pop('photo_url')
+        professor = SugangBuilder.build_professor(**_professor)
+
+        course.professor = professor
+        course.save()
 
         log.debug("end fetch %s %s %s" % (name, cour_cd, cour_cls))
 
@@ -192,16 +204,19 @@ class SugangClient(SugangParser, SugangRequester):
             _first_cds = self.parse_general_first_cd_list(raw_html=self.request_general_first_cd_list())
             for _first_cd in _first_cds:
                 _second_cds = list(self.parse_general_second_cd_list(
-                    raw_html=self.request_general_second_cd_list(general_first_cd=_first_cd)
+                    raw_html=self.request_general_second_cd_list(
+                        general_first_cd=_first_cd['general_first_cd']
+                    )
                 ))
                 if not _second_cds:
                     self.process_general_each_gen(
-                        general_first_cd=_first_cd
+                        general_first_cd=_first_cd['general_first_cd']
                     )
                 else:
                     for _second_cd in _second_cds:
                         self.process_general_each_gen(
-                            general_first_cd=_first_cd, general_second_cd=_second_cd
+                            general_first_cd=_first_cd['general_first_cd'],
+                            general_second_cd=_second_cd['general_second_cd']
                         )
 
 
@@ -222,6 +237,7 @@ class SugangClient(SugangParser, SugangRequester):
         )
         _courses = self.parse_course_list(raw_html=_res, is_general_doc=True)
 
+
         for _course in _courses:
             name = _course['name']
             cour_cd = _course['cour_cd']
@@ -229,6 +245,18 @@ class SugangClient(SugangParser, SugangRequester):
             grad_cd = _course['grad_cd']
             is_relative = _course['is_relative']
             is_limited = _course['is_limited']
+
+            dept_cd = _course['dept_cd']
+
+            department = Department.objects.get(
+                colleage__year=self.year, colleage__term=self.term.value, dept_cd=dept_cd
+            )
+            colleage = department.colleage
+
+            # process_course_and_professor 에서 사용합니다.
+            self.colleage = colleage
+            self.department = department
+
             self.process_course_and_professor(
                 name=name, cour_cd=cour_cd, cour_cls=cour_cls, grad_cd=grad_cd,
                 is_limited=is_limited, is_relative=is_relative
