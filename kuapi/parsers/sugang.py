@@ -2,12 +2,12 @@ import logging
 
 import lxml.html
 from lxml.html import HtmlElement
-from parse import parse, search, findall
+from parse import parse, search
 
 from types import GeneratorType
 
 from kuapi.miscs import extract_query_from_url
-from kuapi.enums.sugang import Campus, Term, Week
+from kuapi.enums import Term
 from kuapi.regexrs import SugangRegexr
 from kuapi.miscs import satinize
 

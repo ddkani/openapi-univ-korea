@@ -1,7 +1,7 @@
 import re
 import logging
 
-from kuapi.enums.sugang import Week
+from kuapi.enums import Week
 
 ## regex 로 처리해야하는 데이터가 많을 경우, 파일의 효용성을 위해 별도로 분리하였음.
 ## 또한 regex expression 을 경우에 따라 컴파일하여 쓰는것이 바람직함.

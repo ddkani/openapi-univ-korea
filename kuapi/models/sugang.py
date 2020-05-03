@@ -1,14 +1,11 @@
-from datetime import datetime
-
 from django.db.models import Model, CASCADE
 
 from django.db.models import ForeignKey
-from django.db.models import OneToOneField
 from django.db.models import \
-    CharField, SmallIntegerField, UUIDField, IntegerField, EmailField, AutoField, BigAutoField, TextField, \
+    CharField, SmallIntegerField, IntegerField, BigAutoField, TextField, \
     BinaryField, DecimalField
 
-from kuapi.enums.sugang import Campus, Term, Week
+from kuapi.enums import Campus, Term, Week
 from kuapi.config import MAX_LEN_DEFFIELD, MAX_LEN_MIDFIELD, MAX_LEN_SMFIELD, MAX_IMAGE_SIZE
 
 # django.models.signal => 작업 전 / 작업 후 경과를 보고. 여기서 작업을 중지 할 수 없음.

@@ -1,7 +1,7 @@
 import logging
 from requests import Session
 
-from kuapi.enums.sugang import Campus, Term
+from kuapi.enums import Campus, Term
 from kuapi.config import USER_AGENT
 
 log = logging.getLogger(__name__)
@@ -21,6 +21,7 @@ URL_LEC_DEPT_POPUP = 'http://sugang.korea.ac.kr/lecture/LecDeptPopup.jsp'
 URL_LEC_DETAIL = 'http://infodepot.korea.ac.kr/lecture1/lecsubjectPlanView.jsp'
 PARAMS_LANG = {'lang' : 'KOR'}
 DEFAULT_GRAD_CD = "0136"
+
 
 class SugangRequester(Session):
     """

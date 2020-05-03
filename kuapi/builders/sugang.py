@@ -1,7 +1,7 @@
 import logging
 
 from kuapi.models.sugang import Colleage, Department, CourseTimetable, Course, Professor
-from kuapi.enums.sugang import Term, Campus, Week
+from kuapi.enums import Term, Campus, Week
 
 
 # TODO: builder 코드는 모델을 별도로 생각하고, 업데이트가 일어날만한 파서의 코드 중심으로 모델생성을 다시작성.

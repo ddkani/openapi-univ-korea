@@ -1,7 +1,7 @@
 import logging
 
 from kuapi.builders.sugang import SugangBuilder
-from kuapi.enums.sugang import Term, Campus
+from kuapi.enums import Term, Campus
 from kuapi.models.sugang import Colleage, Department
 from kuapi.parsers.sugang import SugangParser
 from kuapi.requesters.sugang import SugangRequester
@@ -180,7 +180,10 @@ class SugangClient(SugangParser, SugangRequester):
         ## 사진 정보는 나중에 다운로드 받을 수 있도록 지원함.
         _professor = self.parse_professor(raw_html=_res)
         _professor.pop('photo_url')
-        SugangBuilder.build_professor(**_professor)
+        professor = SugangBuilder.build_professor(**_professor)
+
+        course.professor = professor
+        course.save()
 
         log.debug("end fetch %s %s %s" % (name, cour_cd, cour_cls))
 

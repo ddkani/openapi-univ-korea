@@ -3,7 +3,7 @@ import logging
 import os
 
 from kuapi.models.sugang import Professor
-from kuapi.enums.sugang import Campus, Term
+from kuapi.enums import Campus, Term
 from kuapi.parsers.sugang import SugangParser
 from kuapi.requesters.sugang import SugangRequester
 from kuapi.clients.sugang import SugangClient
