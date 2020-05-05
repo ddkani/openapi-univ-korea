@@ -1,0 +1,697 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr"> 
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+
+
+
+
+
+
+
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, target-densitydpi=medium-dpi" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<meta http-equiv="Cache-Control" content="no-store"/>  
+<meta http-equiv="Pragma" content="no-cache"/>  
+<meta http-equiv="Expires" content="0"/>  
+<link type="text/css" rel="stylesheet" href="/css/new/style.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/sub.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/popup.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/jquery-ui-1.10.3.custom.css"  charset="euc-kr" />
+<!--[if IE 9]>
+<link type="text/css" rel="stylesheet" href="/css/new/ie.css" />
+<![endif]-->
+<style type="text/css" media="print">
+	body{background:#fff;font-size:14px;font-family:Dotum;line-height:12px;color:black;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/scripts/new/jquery-1.10.2.min.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/scripts/new/jquery-ui-1.10.3.custom.min.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/scripts/new/jquery_controller.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/scripts/new/jquery.timeentry.min.js" charset="euc-kr"></script>
+<!--[if lte IE 8]>
+<script type="text/javascript" src="/scripts/new/PIE.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+	document.domain = 'korea.ac.kr';
+	var img_src = '/images';
+	var css_src = '/css';
+	var js_src = '/scripts';
+	var yyyymmdd = '20200505';
+	var language = 'ko';
+	$(window).load(function(){
+		try {
+			top.setResize(this);
+		} catch(e) {
+			
+		}
+	});
+	var browser = (function() {
+	    var s = navigator.userAgent.toLowerCase();
+	    var match = /(webkit)[ \/](\w.]+)/.exec(s) ||
+	                /(opera)(?:.*version)?[ \/](\w.]+)/.exec(s) ||
+	                /(msie) ([\w.]+)/.exec(s) ||
+	               !/compatible/.test(s) && /(mozilla)(?:.*? rv:([\w.]+))?/.exec(s) ||
+	               [];
+	    return { name: match[1] || "", version: match[2] || "0" };
+	}());
+</script>
+
+<script type="text/javascript">	
+
+	function goSearchList() {
+		if( document.Search.KeyWord.value == ''  ) {
+			alert("검색어를 입력하세요.");
+			document.Search.KeyWord.focus();
+			return;
+		}
+		
+		document.Search.action ="NoticeList.jsp";
+		document.Search.hdCurrPage.value = "1";
+		document.Search.submit();
+	}
+	
+	function goSearchListYear() {
+		if( document.Search.KeyWord2.value == ''  ) {
+			alert("게시년도 4자리를 입력하세요. \n\n 지난 공지사항 : 2002년부터  \n 지난 학사일정 : 2010년부터 \n 지난 장학금공지 : 2010년부터");
+			document.Search.KeyWord2.focus();
+			return;
+		}
+		
+		document.Search.action ="NoticeList.jsp";
+		document.Search.hdCurrPage.value = "1";
+		document.Search.submit();
+	}
+	
+		function goSearchListNull() {
+		if( document.Search.KeyWord2.value == ''  ) {
+			alert("게시년도 4자리를 입력하세요. \n\n 지난 공지사항 : 2002년부터  \n 지난 학사일정 : 2010년부터 \n 지난 장학금공지 : 2010년부터");
+			document.Search.KeyWord2.focus();
+			return;
+		}
+		if( document.Search.KeyWord.value == ''  ) {
+			document.Search.KeyWord.focus();
+			return;
+		}
+		
+		document.Search.action ="NoticeList.jsp";
+		document.Search.hdCurrPage.value = "1";
+		document.Search.submit();
+	}
+	
+	
+	function f_onClick(obj) {
+		switch (obj.name) {
+
+			//월간
+		 	case "b_month" :
+				if("my" == "all"){
+					document.Search.action ="/schedule/jsp/schedule.do?cmd=myScheduleList";
+			 	}else{
+					document.Search.action ="/schedule/jsp/schedule.do?cmd=scheduleList";
+			 	}			
+            	document.Search.target = "_self";
+            	document.Search.submit();
+				break;
+		
+			//주간
+			case "b_week" :
+				document.Search.action ="/schedule/jsp/weekCalendar.jsp?nowTab="+$('input[name=tab]').val();
+				document.Search.target = "_self";
+	            document.Search.submit();
+           		break;
+		
+			//일간
+		 	case "b_day" :
+				document.Search.action ="/schedule/jsp/dayCalendar.jsp?nowTab="+$('input[name=tab]').val();
+	            document.Search.target = "_self";
+	            document.Search.submit();
+            	break;
+
+         	//쓰기 모드
+			case "bu_insert" :
+            	document.Search.index.value = "0";
+            	document.Search.JOB_MODE.value = "I";
+
+            	if(document.Search.access_type.value == "0") document.Search.kind.value = "11";
+				
+            	document.Search.action ="NoticeWrite.jsp";
+            	document.Search.target = "_self";
+            	document.Search.submit();
+				break;
+
+			//전체보기
+         	case "bu_all_list" :
+            	document.Search.hdListCount.value = "99";
+            	document.Search.action ="NoticeList.jsp";
+            	document.Search.target = "_self";
+            	document.Search.submit();
+				break;
+
+			//페이별보기
+         	case "bu_list" :
+            	document.Search.hdCurrPage.value = "1";
+            	document.Search.hdListCount.value = "10";
+            	document.Search.action ="NoticeList.jsp";
+            	document.Search.target = "_self";
+            	document.Search.submit();
+				break;
+		}
+   	}
+      
+   	function view1(kind, index, message_id, replyTop,replyPos,replyTo,rowReply,depth ,calIndex) {
+      	document.Search.index.value=index;
+      	document.Search.message_id.value=message_id;
+      	document.Search.replyTop.value=replyTop;
+      	document.Search.replyPos.value=replyPos;
+      	document.Search.replyTo.value=replyTo;			
+      	document.Search.rowReply.value=rowReply;			
+      	document.Search.depth.value=depth; 
+      	document.Search.calIndex.value=calIndex;
+      	document.Search.JOB_MODE.value = "Q";
+      	document.Search.target = "_self";
+
+      	if(kind == "41") {
+         	document.Search.action = "OpinionView.jsp";
+      	} else if (kind == "11" || kind == "12" || kind == "21" || kind == "31" || kind == "51" || kind == "71" || kind == "89" || kind == "88" || kind == "90" || kind == "91" || kind == "92" || kind == "93") {
+         	document.Search.action = "NoticeView.jsp";
+      	} else {
+         	document.Search.action = "ResearchView.jsp";
+      	}
+      	document.Search.submit();
+   	}
+
+   	function view(kind, index, message_id, replyTop,replyPos,replyTo,rowReply,depth ) {
+		document.Search.index.value=index;
+		document.Search.message_id.value=message_id;
+		document.Search.replyTop.value=replyTop;
+		document.Search.replyPos.value=replyPos;
+		document.Search.replyTo.value=replyTo;            
+		document.Search.rowReply.value=rowReply;          
+		document.Search.depth.value=depth;
+		document.Search.kind.value=kind;
+		document.Search.JOB_MODE.value = "Q";
+		document.Search.target = "_self";
+
+		if(kind == "41") {
+			document.Search.action = "OpinionView.jsp";
+		} else if (kind == "11" || kind == "12" || kind == "70" || kind == "21" || kind == "31" || kind == "51" || kind == "71" || kind == "89" || kind == "88" || kind == "14" || kind == "90" || kind == "91" || kind == "92" || kind == "93" ) {
+			document.Search.action = "NoticeView.jsp";
+		} else {
+			document.Search.action = "ResearchView.jsp";
+		}
+		
+		document.Search.submit();
+   	}
+
+   	function gotoPage(pageno) {
+		document.Search.hdCurrPage.value	= pageno;
+      	document.Search.submit();
+   	}
+      
+   	//엔터키
+	function entersubmit_key(controlBox)	{
+		if (event.keyCode == 13){
+			if (controlBox=="Search") goSearchList();
+		}
+	}
+
+   	//엔터키
+	function entersubmit_key_Year(controlBox)	{
+		if (event.keyCode == 13){
+			if (controlBox=="SearchYear") goSearchListYear();
+		}
+	}
+	
+	//엔터키
+	function entersubmit_key_Null(controlBox)	{
+		if (event.keyCode == 13){
+			if (controlBox=="Search") goSearchListNull();
+		}
+	}
+
+   
+	$(document).ready(function(){
+		if( "my" == "all" ){
+			$('.sche02').addClass('sche');
+			$('#allMySchedule').hide();
+			$('#CanAllMySchedule').show();
+			$('input[name=grwIndex]').removeAttr('disabled');
+			
+		}else{
+			$('.sche01').addClass('sche');
+			$('#allMySchedule').show();
+			$('#CanAllMySchedule').hide();
+			
+		}
+		
+		//전체일정
+		$('.sche01').click(function(){
+			document.Search.action = "/GroupWare/user/NoticeList.jsp?kind=89&temp=all";
+			document.Search.submit();
+		});
+		
+		//나만의 일정
+		$('.sche02').click(function(){
+			document.Search.action = "/GroupWare/user/NoticeList.jsp?kind=89&temp=my";
+			document.Search.submit();
+		});
+		
+		/*나만의일정 일괄등록*/
+		$('#allMySchedule').click(function(){
+			if(!$('input[name=grwIndex]').is(':checked')){
+				alert('체크박스를 선택해주세요');
+				return;
+			}
+
+			document.Search.action = "/GroupWare/user/CanSchedule.jsp?jobmode=HI";
+			document.Search.submit();
+		});
+
+
+	    //나만의 일정취소
+		$('#CanAllMySchedule').click(function(){
+			if(!$('input[name=grwIndex]').is(':checked')){
+                alert('체크박스를 선택해주세요');
+                return;
+            }
+
+			document.Search.action = "/GroupWare/user/CanSchedule.jsp?jobmode=HD";
+			document.Search.submit();
+		});
+	    
+	});
+	
+</script>
+</head>
+
+<body>
+	<!-- Contents -->
+	<div class="sub_content">
+		<div class="top_page">
+			<h3>학사일정</h3>
+			<span class="line">&nbsp;</span>
+		</div>
+		<div class="page">
+			<form name='Search' id='Search' method='post'>
+				<input type="hidden" name="language" value="ko"/>
+				
+				<div class="tbl_search2">
+					<div class="single">
+						<label>상세검색</label>
+						<span class="line">&nbsp;</span>
+						<div>
+							
+							<select name="WhereSelect">
+							<option value="all" selected>선택</option>
+							<option value="WhereName" >작성자</option>
+							<option value="WhereDept" >작성부서</option>
+							<option value="WhereSubject" >제목</option>
+							</select>
+							
+							<!-- 2019.02.01 지난 공지사항, 지난 학사일정, 지난 장학금공지 조회의 경우 게시년도 필수입력을 위한 텍스트박스 추가 swjeong -->
+							
+							<input type="text" name="KeyWord" size="12" class="iptsearch"value="" onkeydown="entersubmit_key_Null('Search')">
+						</div>
+						<span class="box_right">
+							<span class="line">&nbsp;</span>
+							<input type="submit" class="mbtn submit" value="검색" />
+						</span>
+					</div>
+					<div class="form_btns">
+						
+						<button type="button" class="mbtn btnwhite">전체일정</button>
+						<button type="button" class="mbtn btnwhite">나만의일정</button>
+							
+						<button type="button" class="mbtn btnwhite" name="bu_all_list" onclick="f_onClick(this)">전체보기</button>
+							
+						    
+						<input type="hidden" name="jobmode" value="HD"/>	
+						<button type="button" class="mbtn btnwhite" name="b_month" onclick="f_onClick(this)">월간</button>
+						<button type="button" class="mbtn btnwhite"  name="b_week" onclick="f_onClick(this)">주간</button>
+						<button type="button" class="mbtn btnwhite" name="b_day" onclick="f_onClick(this)">일간</button>
+						<button type="button" class="mbtn btnwhite" id="allMySchedule">나만의일정등록</button>
+						<button type="button" class="mbtn btnwhite" id="CanAllMySchedule">나만의일정취소</button>
+						<button type="button" class="mbtn btnwhite"  name="bu_insert" onclick="f_onClick(this)">글쓰기</button>
+						
+					</div>
+				</div>
+					<!-- ///////////////////// 목록 리스트 시작 /////////////////////////////////////////////////////////////////////////////////////////////// -->
+					
+				<table>
+					<colgroup>
+						<col width="3%" />
+						<col width="14%" />
+						<col width="14%" />
+						<col width="" />
+						<col width="17%" />
+						<col width="6%" />
+						<col width="9%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th><input type="checkbox" class="allcheck" /></th>
+							<th>시작일시</th>
+							<th>종료일시</th>
+							<th>제목</th>
+							<th>부서</th>
+							<th>조회수</th>
+							<th class="last">게시기한</th>
+						</tr>
+					</thead>
+					<tbody>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202004231559530720"  />
+					
+							</td>
+							<td>2020-04-24(12:00)</td>
+							<td>2020-05-15(18:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202004231559530720','89755','89755','89756','0','0','0' ,'' );">[세종]2017학년도 학사구조개편 관련 재학생 전과 신청..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:changho@korea.ac.kr" title="changho">교무학사팀</a></td>
+							<td>1305</td>
+							<td>
+                	 2020-05-15
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202004211516100519"  />
+					
+							</td>
+							<td>2020-04-21(16:00)</td>
+							<td>2020-07-31(16:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202004211516100519','89733','89733','89734','0','0','0' ,'' );">2020학년도 제2학기 이중전공 전형 시행 안내(일정 수정..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀 </a></td>
+							<td>7766</td>
+							<td>
+                	 2020-07-31
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202004211135330493"  />
+					
+							</td>
+							<td>2020-05-20(10:00)</td>
+							<td>2020-07-17(23:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202004211135330493','89730','89730','89731','0','0','0' ,'' );">2020학년도 여름계절수업(Summer Session) 개설 안내..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀 </a></td>
+							<td>10072</td>
+							<td>
+                	 2020-07-17
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202003301457570539"  />
+					
+							</td>
+							<td>2020-03-30(21:00)</td>
+							<td>2020-05-17(23:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202003301457570539','89541','89541','89542','0','0','0' ,'' );">[학사팀] 2020학년도 제2학기 융합전공 신청 안내..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀 </a></td>
+							<td>8646</td>
+							<td>
+                	 2020-05-17
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202003251655100464"  />
+					
+							</td>
+							<td>2020-03-25(17:30)</td>
+							<td>2020-06-30(23:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202003251655100464','89516','89516','89517','0','0','0' ,'' );">[학사팀] 2020학년도 제2학기 학생설계전공 신청 안내..
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀 </a></td>
+							<td>1894</td>
+							<td>
+                	 2020-06-30
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202003090941060930"  />
+					
+							</td>
+							<td>2020-04-08(10:00)</td>
+							<td>2020-07-03(17:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202003090941060930','89371','89371','89372','0','0','0' ,'' );">2020학년도 1학기 취득학점 포기제 시행 안내
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀 </a></td>
+							<td>7328</td>
+							<td>
+                	 2020-07-03
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202002281528080664"  />
+					
+							</td>
+							<td>2020-02-28(18:00)</td>
+							<td>2020-07-31(18:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202002281528080664','89305','89305','89306','0','0','0' ,'' );">[학사팀] 2020학년도 1학기 다중전공 포기 일정 안내..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀 </a></td>
+							<td>2767</td>
+							<td>
+                	 2020-07-31
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202002251704330706"  />
+					
+							</td>
+							<td>2020-02-25(17:00)</td>
+							<td>2020-05-29(17:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202002251704330706','89255','89255','89256','0','0','0' ,'' );">[학부] 코로나 19 감염증 관련 특별휴학 시행 안내_대상..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀</a></td>
+							<td>20869</td>
+							<td>
+                	 2020-05-29
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202002191724460651"  />
+					
+							</td>
+							<td>2020-04-13(10:00)</td>
+							<td>2020-07-27(23:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202002191724460651','89199','89199','89200','0','0','0' ,'' );">2020학년도 여름계절수업 운영 방법 및 일정 안내..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:jedai@korea.ac.kr" title="jedai">학사팀</a></td>
+							<td>10298</td>
+							<td>
+                	 2020-07-27
+
+							</td>
+						</tr>
+                	 
+						<tr>
+							<td>
+					
+												<input name="grwIndex" type="checkbox" value="202001291528250928"  />
+					
+							</td>
+							<td>2020-01-29(12:00)</td>
+							<td>2020-06-30(23:00)</td>
+							<td class="aleft">
+								
+								<a href="javascript:view1( '89','202001291528250928','88966','88966','88967','0','0','0' ,'' );">[재무부] 2020학년도 1학기 대학(원) 재학생·복학생·재..
+								
+								<span class="link">&nbsp;</span>
+								
+								</a>
+							</td>
+							<td><a href="mailto:igjang@korea.ac.kr" title="igjang">재무부</a></td>
+							<td>60594</td>
+							<td>
+                	 2020-06-30
+
+							</td>
+						</tr>
+                	 
+   					</tbody>
+   				</table>
+   					
+<!-- ///////////////////// 목록 리스트 끝 ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+			<div class="paging"><div><a href="#first" class="btn first">&nbsp;</a><a href="#prev" class="btn prev">&nbsp;</a><span>1</span> <a href="javascript:gotoPage(2)">2</a> <a href="javascript:gotoPage(2)" class="btn next">&nbsp;</a><a href="javascript:gotoPage(2)" class="btn last">&nbsp;</a>
+			
+			<input type="hidden" name="tab" value="all">
+			<input type="hidden" name="temp" value="all">
+			<input type="hidden" name="JOB_MODE">
+			<input type="hidden" name="JOBMODE" value="I">
+			<input type="hidden" name="hdCurrPage"  value="1">
+			<input type="hidden" name="hdListCount" value="10">
+			<input type="hidden" name="hdPageCount" value="5" >
+			<input type="hidden" name="hdPageList">
+			<input type="hidden" name="userid">
+			<input type="hidden" name="index">
+			<input type="hidden" name="message_id">
+			<input type="hidden" name="replyTop">
+			<input type="hidden" name="replyPos">
+			<input type="hidden" name="replyTo">
+			<input type="hidden" name="rowReply">
+			<input type="hidden" name="depth">
+			<input type="hidden" name="kind" value="89">
+			<input type="hidden" name="type" value="0">
+			<input type="hidden" name="mode" value="0">
+			<input type="hidden" name="flag" value="">
+			<input type="hidden" name="access_type" value="Y">
+			<input type="hidden" name="calIndex"> 
+			<input type="hidden" name="token" value="Vy23zFySFx5FASzTyKOREAx5FUNIVzCy1588688460zPy86400zAy34zEyZrlnx7A7Gx78tEx79QSRZtKu0pkx2BT2rLfSx2FRQpvx2B5eLGQDtx2Ft4bbHkOIphx2BCSntqOb7TBUUXK12BW2HFNqSHSrsIt98JKLg2wjfix2BBwPx7AU0x79EErUElj918ffsJx78r72kb7UwSreJ3BcV1hjJMsx2BtOGmQhCZqQ8Ax2BZBmgfuEHC4eCaA5X3x2FVuh2GBPiL0qOjsDpIx7APax791M4inKeox79m9C40JjTSNgx79dWXjtVqGhIhgAo1DmpZZDx7AD7PDgABx78Fx78Fopx2Bx2BC1wgSvCx2F8pJENmBHPEue3JWmf8toNWKNNePe9MgVnbXTWwP1x79ZZw5Nx79RBOx7AcAeWOPCcZ4RkT1QELBFoQSx78sVQmIVLGx79UnhPx7A7iDx2Fx782fsX7ZbGOC6ECb73ltOABHMkkPx79m4kw3XNnWCXOx78stQYfRcUADOtvSEkfHLkAFtx2BCrci1v1dKC6gpWbqex7Aw8A4cAYalJx79k6BmYFKinSYrBquux7Ax78x2BSx7A1j5j6FiHgfx2BFHVYQ7fYISLpbMw8VfoBetvbHwcx78Ra2kLVCJeDUO0ZEx789x2BNbuc4SFlHglnIaRuRmm54unNsXLChaqT7WIIM6MbwhcUpf6tFC205Lx7Ak2t3iCBAx79RTtcmASvqLbY6vLlssMsQs7ReT4E8IJ1uDjwMBsx79x79gbbalwjNkKddXROqGEx782Vq8q8ANx7AQC00COA6JLMbFs6qnox7A0jsF8vx7AV5G7BEx79OebQgE07x2Fqox789XA7cD9kua8VZfaqx79OhRS2x78Ljh6Tscx7Al6IHR35tMJVn3XHOGQ3x79qSY9N3JmMgTRukZ51MknnlnSUwx2B2U92aRedXuHqDgEgc5LWx78q2867iLCBI3MDgpp9VImHCDbY7lW7F5iBeS5k0qJu4x7AfZ6x7Ax78Ex7Af6NMWO4UeR3swB1OkRx79x2B9kagAX4erx79B0oTwn0x2B282x2BwClEwQXI00KlAhH65hZPIdx79Ox7AP6UHQx79jKKSgx78MTf2QITuTY7RCJOx2FSnAsngx7ArRn1bVx2FWi8w1452mclPSx2F2dveN277p1cQ5WbVM4pRcQbLZibO1JVeagcBQmx2Fqku8b1cx2FbFKgUuWARioVJqJ03x78UbjBsFhXViXq2uJx783gX0HSNe79Ux7AXvIQfAnfevI7wwAeBHN9bY1zKyfNHtchx2B9x7A5fpSvFvsThkeFTUlVX2PjIYXUx2FSox2FpYWU8x3DzTSy1588774860zMytu5f8afx79Jhgx3Dz" />
+		</form>
+	</div>
+</div>
+</body>
+</html>

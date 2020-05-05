@@ -34,7 +34,7 @@ DATA_GET_GMSPORTAL_INFO = {
 ## 수강신청 서비스와 달리 포매팅이 되어 반환되므로, 별도의 parser를 또 만들 필요는 없습니다.
 ## 요청이 올바른지의 검증도 requester에서 확인합니다.
 
-class GmsPortalRequester(Session):
+class GmsRequester(Session):
 
     sso_token = None # type: str
     authorized = None # type: bool

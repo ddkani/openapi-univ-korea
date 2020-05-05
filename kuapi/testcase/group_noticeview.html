@@ -1,0 +1,433 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+
+
+
+
+
+
+
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, target-densitydpi=medium-dpi" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<meta http-equiv="Cache-Control" content="no-store"/>  
+<meta http-equiv="Pragma" content="no-cache"/>  
+<meta http-equiv="Expires" content="0"/>  
+<link type="text/css" rel="stylesheet" href="/css/new/style.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/sub.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/popup.css"  charset="euc-kr" />
+<link type="text/css" rel="stylesheet" href="/css/new/jquery-ui-1.10.3.custom.css"  charset="euc-kr" />
+<!--[if IE 9]>
+<link type="text/css" rel="stylesheet" href="/css/new/ie.css" />
+<![endif]-->
+<style type="text/css" media="print">
+	body{background:#fff;font-size:14px;font-family:Dotum;line-height:12px;color:black;}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/scripts/new/jquery-1.10.2.min.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/scripts/new/jquery-ui-1.10.3.custom.min.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/scripts/new/jquery_controller.js" charset="euc-kr"></script>
+<script type="text/javascript" src="/scripts/new/jquery.timeentry.min.js" charset="euc-kr"></script>
+<!--[if lte IE 8]>
+<script type="text/javascript" src="/scripts/new/PIE.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+	document.domain = 'korea.ac.kr';
+	var img_src = '/images';
+	var css_src = '/css';
+	var js_src = '/scripts';
+	var yyyymmdd = '20200505';
+	var language = 'ko';
+	$(window).load(function(){
+		try {
+			top.setResize(this);
+		} catch(e) {
+			
+		}
+	});
+	var browser = (function() {
+	    var s = navigator.userAgent.toLowerCase();
+	    var match = /(webkit)[ \/](\w.]+)/.exec(s) ||
+	                /(opera)(?:.*version)?[ \/](\w.]+)/.exec(s) ||
+	                /(msie) ([\w.]+)/.exec(s) ||
+	               !/compatible/.test(s) && /(mozilla)(?:.*? rv:([\w.]+))?/.exec(s) ||
+	               [];
+	    return { name: match[1] || "", version: match[2] || "0" };
+	}());
+</script>
+
+<link rel=stylesheet type="text/css" href="/smartediter/css/style.css" />
+<script type="text/javascript" src="/GroupWare/scripts/file_manager.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+   function f_onClick(obj) {
+
+      switch (obj.name) {
+
+      	 // 2009-11-28  bu_return : 회수  jobmode : T
+      	case "bu_return" :
+          if( confirm('회수하시겠습니까?') ) {
+					document.myForm.JOB_MODE.value = "T";
+					document.myForm.target = "_self";
+					document.myForm.action = "NoticeView.jsp";
+					document.myForm.submit();
+          }
+          break;
+
+         // 1. bu_insert_form : 쓰기 Form
+         case "bu_insert_form" :
+            document.myForm.index.value = "0";
+            document.myForm.JOB_MODE.value = "I";
+            document.myForm.target = "_self";
+            document.myForm.action = "NoticeWrite.jsp";
+            document.myForm.submit();
+            break;
+
+         // 2. bu_delete : 삭제
+         case "bu_delete" :
+            if( confirm('삭제하시겠습니까?') ) {
+					document.myForm.JOB_MODE.value = "D";
+					document.myForm.target = "_self";
+					document.myForm.action = "NoticeView.jsp";
+					document.myForm.submit();
+            }
+            break;
+
+            // 2.1 bu_del_manager : 관리자 삭제
+         case "bu_del_manager" :
+            if( confirm('게시글을 삭제하시겠습니까?') ) {
+					document.myForm.JOB_MODE.value = "DM";
+					document.myForm.target = "_self";
+					document.myForm.action = "NoticeView.jsp";
+					document.myForm.submit();
+            }
+            break;
+
+         // 3. bu_list : 목록
+         case "bu_list" :
+            if(document.myForm.kind.value == "41") {
+               document.myForm.action ="OpinionList.jsp";
+            } else if("all" == ("82")){
+            	document.myForm.action ="NoticeList.jsp?kind=11&temp=82";               
+            } else {
+               document.myForm.action ="NoticeList.jsp";
+            }
+            document.myForm.target = "_self";
+            document.myForm.submit();
+            break;
+            
+         // 3-1. bu_print : 출력
+         case "bu_print" :
+            if(document.myForm.kind.value != "41") {
+               //window.print(); 2017.06.22 프린트 이상으로 수정
+               document.execCommand("print",false,null);
+            }
+            break;
+
+         // 10. bu_update_form : 게시물수정Form
+         case "bu_update_form" :
+			document.myForm.JOB_MODE.value = "U";
+            document.myForm.target = "_self";
+            document.myForm.action = "NoticeModify.jsp";
+            document.myForm.submit();
+            break;
+            
+         // 11. bu_rewrite : 재공지
+         case "bu_rewrite" :
+            if( confirm('재공지하시겠습니까?') ) {
+               document.myForm.JOB_MODE.value = "R";
+               document.myForm.action ="NoticeView.jsp";
+               document.myForm.target = "_self";
+               document.myForm.submit();
+            }
+            break;
+		
+           // 12. bu_temp : 영문 번역 게시물 관리 게시물수정
+           case "bu_temp" :
+  			  document.myForm.JOB_MODE.value = "U";
+              document.myForm.target = "_self";
+              document.myForm.action = "NoticeModify.jsp";
+              document.myForm.submit();
+              break;
+
+
+           // 13. 현재게시물 나만의 일정 등록
+           case "AddSchedule" :
+              document.myForm.JOB_MODE.value = "SU";
+              document.myForm.submit();
+              break;
+
+           // 14. 현재게시물 나만의 일정 삭제
+           case "RemoveSchedule" :
+              document.myForm.JOB_MODE.value = "SD";
+              document.myForm.submit();
+              break;
+
+           // 15. 현재게시물 나만의 일정 삭제2
+           case "RemoveSchedule2" :
+              document.myForm.JOB_MODE.value = "SD2";
+              document.myForm.submit();
+              break;
+           // 16. 상위고정 on 
+           case "bu_top_order_on" :
+              if( confirm('상위고정 하시겠습니까?') ) {
+                 document.myForm.JOB_MODE.value = "TON";
+                 document.myForm.action ="NoticeView.jsp";
+                 document.myForm.target = "_self";
+                 document.myForm.submit();
+              }
+              break;
+           // 17. 상위고정 off
+           case "bu_top_order_off" :
+               if( confirm('상위고정해제 하시겠습니까?') ) {
+                  document.myForm.JOB_MODE.value = "TOFF";
+                  document.myForm.action ="NoticeView.jsp";
+                  document.myForm.target = "_self";
+                  document.myForm.submit();
+               }
+               break;              
+
+        
+      }
+   }
+</script>
+</head>
+
+<body>
+	<!-- Contents -->
+	<div class="sub_content">
+		<div class="top_page">
+			<h3>학사일정</h3>
+			<span class="line">&nbsp;</span>
+		</div>
+		<div class="page">
+							
+<!-- //////////////////// 상단 버튼 시작 //////////////////////////////////////////////////////////////////////////////////////////////// -->
+			<div class="bottom_btns_right">
+											<input type="button" value="수정" title="수정" class="mbtn btnwhite" name="bu_update_form" onclick="javascript:f_onClick(this)" />		
+				<input type="button" value="출력" title="출력" class="mbtn btnwhite" name="bu_print" onclick="javascript:f_onClick(this)" />
+											
+				<input type="button" value="목록" title="목록" class="mbtn btnwhite" name="bu_list" onclick="javascript:f_onClick(this)" />
+			</div>
+<!-- //////////////////// 상단 버튼 끝 /////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////// 게시물 내용 시작 //////////////////////////////////////////////////////////////////////////////////////////////// -->
+			<form method="post" name="Detail" enctype="multipart/form-data">
+				<table class="tbl_view">
+						<colgroup>
+							<col width="12%" />
+							<col width="*" />
+							<col width="12%" />
+							<col width="15%" />
+							<col width="12%" />
+							<col width="15%" />
+						</colgroup>
+						<tbody>
+
+							<tr>
+								<th style="min-width: 60px;">작성자</th>
+								<td>박연미</b>&nbsp;&nbsp;&nbsp;(교무학사팀)</td>
+								<th style="min-width: 60px;">승인자</th>
+								<td colspan="3">이창호</b>&nbsp;&nbsp;&nbsp;(교무학사팀)</td>
+							</tr>
+
+							<tr>
+								<th  style="min-width: 60px;">게시기한</th>
+								<td> 
+								2020-04-24~
+								
+								2020-05-15
+								</td>
+								<th  style="min-width: 60px;">승인일자</th>
+								<td colspan="3">2020-04-24 (금) 오후 01:09</td>
+							</tr>
+							<!-- 재공지일자, 상위고정 추가 -->
+
+							</tr>
+							<tr>
+								<th  style="min-width: 60px;">게시대상</th>
+								<td>세종(학부, 교수, 직원),교학처(강사, 대학원, 학부, 교수, 직원)</td>
+								<th  style="min-width: 60px;">분류</th>
+								<td style="min-width: 40px;">학사일정</td>
+								<th  style="min-width: 60px;">게시형태</th>
+								<td style="min-width: 40px;">일반</td>
+							</tr>
+											
+							<tr>
+								<th  style="min-width: 60px;">시작일시</th>
+								<td>2020-04-24 12:00</td>
+								<th  style="min-width: 60px;">종료일시</th>
+								<td colspan="3">2020-05-15 18:00</td>
+							</tr>
+											
+											
+							<tr>
+								<th  style="min-width: 60px;">제목</th>
+								<td colspan="5">[세종]2017학년도 학사구조개편 관련 재학생 전과 신청 안내(2020학년도 1학기)</td>
+							</tr>
+							<tr>
+								<td colspan="6" class="htmlcontent">
+									<span style="background-color: rgb(255, 255, 255); color: rgb(91, 91, 91); font-family: Dotum;">2017학년도 학사구조개편과 관련하여 세종캠퍼스 재학생들을 대상으로 신규 학과 및 전공으로의 전과신청을 안내하오니 해당 학생들은 아래의 사항을 참고하여 신청기간 내에 신청하여 주시기 바랍니다.</span><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp;</p><p align="center" style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">- 아&nbsp;&nbsp;&nbsp; 래 -</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; 1. 내용: 2017학년도 학사구조개편 관련 재학생 전과신청</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; 2. 대상: 세종캠퍼스 재학생 및 휴학생(수료생 제외)<strong style="margin: 0px; padding: 0px; border: 0px; color: rgb(255, 0, 0); font-size: 14px;">&nbsp; &nbsp;&nbsp;</strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; 3. 대상학과: 첨부파일의 '&lt;별표1&gt; 전과 허용범위' 참조</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp;* 신소재화학과, 전자및정보공학과, 생명정보공학과, 식품생명공학과,환경시스템공학과,자유공학부, 약학과는 제외</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; 4. 신청기간</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp;&nbsp;<b style="margin: 0px; padding: 0px; border: 0px;">&nbsp;1) 2020-1</b><strong style="margin: 0px; padding: 0px; border: 0px;"><u style="margin: 0px; padding: 0px; border: 0px;">학기: 5월 1일(금) 오전 10시 ~ 15일(금) 오후 5시까지</u></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><strong style="margin: 0px; padding: 0px; border: 0px;">&nbsp; &nbsp; &nbsp;2) 기존 이중전공, 복수전공자 신청 : 5월1일 오전 10시~15일 오후 5시까지</strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><strong style="margin: 0px; padding: 0px; border: 0px;"><u style="margin: 0px; padding: 0px; border: 0px;"></u></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><strong style="margin: 0px; padding: 0px; border: 0px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;방문 접수:교무학사팀 행정관110호</strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp;<span style="margin: 0px; padding: 0px; border: 0px; color: rgb(255, 0, 0);"><u style="margin: 0px; padding: 0px; border: 0px;"><strong style="margin: 0px; padding: 0px; border: 0px;">*&nbsp;2017학번 신입생부터는 전과신청 불가합니다.</strong></u></span></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp;<strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; color: rgb(255, 0, 0);"><u style="margin: 0px; padding: 0px; border: 0px;">* 신청기간 내에는 수정이 가능하며, 기간이 끝나면 수정이 불가합니다.</u></span></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><span style="margin: 0px; padding: 0px; border: 0px; color: rgb(255, 0, 0);"><font color="#000000">&nbsp; &nbsp;</font></span>&nbsp;5. 신청방법: 포털시스템 -&nbsp;<strong style="margin: 0px; padding: 0px; border: 0px;"><u style="margin: 0px; padding: 0px; border: 0px;">'학적/졸업 - 학적사항 - 전과신청'에서 신청</u></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; 6. 기타사항</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp;1) 전과는 현재 소속된 학과(부)에서 새로 변경되는 학과 및 전공으로의 소속변경임</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 예) 국어국문학과 -&gt; 한국학전공 (O)</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 국어국문학과 -&gt; 영미학전공 (X) 타 학과 및 전공으로의 신청은 불가함</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; 2) 전과신청 전,&nbsp;<strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; color: rgb(255, 0, 0);"><u style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px;">반드시</span></u></span></strong>&nbsp;신규 학과 및 전공의&nbsp;<strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; color: rgb(255, 0, 0);"><u style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px;">교육과정을 확인 후 신청</span></u></span></strong>해야 함</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (전과는 취소 및 수정이 불가하오니&nbsp;<span style="margin: 0px; padding: 0px; border: 0px; color: rgb(255, 0, 0);"><strong style="margin: 0px; padding: 0px; border: 0px;"><u style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px;">신 교육과정을 반드시 숙지 후 신청</span></u></strong></span>)</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; 3)&nbsp;<strong style="margin: 0px; padding: 0px; border: 0px;"><u style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">전과신청은 재학 중&nbsp;</span><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">1회만 가능함</span></u></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; 4) 신 교육과정은 본인 소속 학과사무실로 문의</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; 5) 전과 적용은 신청한 다음 학기부터 적용(3월 1일 , 9월 1일)되며,</p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong style="margin: 0px; padding: 0px; border: 0px;"><u style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">졸업 학기에 신청 시 초과학기</span><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">&nbsp;이수 후</span><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">&nbsp;졸업해야 함</span></u></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);"><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="margin: 0px; padding: 0px; border: 0px; font-size: 12px;">6) 기존&nbsp;</span><span style="margin: 0px; padding: 0px; border: 0px; font-size: 12px;">교직과정&nbsp;이수자&nbsp;</span><span style="margin: 0px; padding: 0px; border: 0px; font-size: 12px;">및 금학기&nbsp;</span><span style="margin: 0px; padding: 0px; border: 0px; font-size: 12px;">교직과정 신청예정자</span><span style="margin: 0px; padding: 0px; border: 0px; font-size: 12px;">의 경우</span></font></span></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;전과 신청시 기존 교직 이수자는&nbsp;<u style="margin: 0px; padding: 0px; border: 0px;">교직합격사항이 취소</u>되며,</span></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;금학기 &nbsp;<u style="margin: 0px; padding: 0px; border: 0px;">교직신청이 불가</u>함.&nbsp;&nbsp;</span></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);"><font color="#000000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="margin: 0px; padding: 0px; border: 0px; font-size: 12px;">&nbsp;</span></font></span><strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px; color: rgb(255, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;<strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px;">2020년 4월 24일</span></strong></p><p style="border: 0px; color: rgb(91, 91, 91); font-family: Dotum; background-color: rgb(255, 255, 255);"><strong style="margin: 0px; padding: 0px; border: 0px;"><span style="margin: 0px; padding: 0px; border: 0px; font-size: 14px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;교학처장</span></strong></p>
+								</td>
+							</tr>
+											
+							<tr>
+								<th  style="min-width: 60px;">첨부파일</th>
+								<td colspan="5">
+													
+									<p><a href="javascript:Download( '/files/groupware/upload/202004/202004231559530720_세종캠퍼스교육조직개편에따른학생전과시행세칙 개정 전문 및 전과 허용범위.hwp' , '세종캠퍼스교육조직개편에따른학생전과시행세칙 개정 전문 및 전과 허용범위.hwp' , 'application/haansofthwp' , '17920' , '202004231559530720' , '0');" title="세종캠퍼스교육조직개편에따른학생전과시행세칙 개정 전문 및 전과 허용범위.hwp">세종캠퍼스교육조직개편에..</a> [크기 : 17 KB / 다운수 : 4]</p>
+													
+									<p><a href="javascript:Download( '/files/groupware/upload/202004/202004231559530720_세종캠퍼스_다전공 전과신청서.hwp' , '세종캠퍼스_다전공 전과신청서.hwp' , 'application/haansofthwp' , '49664' , '202004231559530720' , '1');" title="세종캠퍼스_다전공 전과신청서.hwp">세종캠퍼스_다전공 전과신청서.hwp</a> [크기 : 48 KB / 다운수 : 2]</p>
+													
+								</td>
+							</tr>
+                              
+						</tbody>
+					</table>
+					<input type="hidden" name="bu_name" />
+					<input type="hidden" name="JOB_MODE"/>
+					<input type="hidden" name="NewIndex" value="202005052345180020"/>
+					<input type="hidden" name="type" value="0"/>
+					<input type="hidden" name="kind" value="89"/>
+					<input type="hidden" name="mode" value="1"/>
+					<input type="hidden" name="flag" value=""/>
+					<input type="hidden" name="access_type" value="Y"/>
+					<input type="hidden" name="depth" value="0"/>
+					<input type="hidden" name="index" value="202004231559530720"/>
+					<input type="hidden" name="replyTop" value="89755"/>
+					<input type="hidden" name="replyTo" value="0"/>
+					<input type="hidden" name="replyPos" value="89756.0"/>
+					<input type="hidden" name="hdCurrPage" value="1"/>
+					<input type="hidden" name="WhereSelect"/>
+					<input type="hidden" name="KeyWord"/>
+					<input type="hidden" name="FILEID"/>
+					<input type="hidden" name="DeptIds" value="K000002:L,P,S,/SA02000:F,H,L,P,S,/"/>
+					<input type="hidden" name="DeptNames"/>
+					<input type="hidden" name="access_s"/><!-- 2007-03-28 게시대상 하나에 묶어서 보냄 -->
+					<input type="hidden" name="mode_s"/><!-- 2007-03-28 게시형태 -->
+				</form>
+<!-- /////////////////// 게시물 내용 끝 //////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- //////////////////// 하단 버튼 시작 //////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+<!-- //////////////////// 하단 버튼 끝 /////////////////////////////////////////////////////////////////////////////////////////////////// -->
+			</div>
+		</div>
+<!-- 파일다운로드를 위한 Form Start -->
+<form name="downForm" method="post">
+   <!-- 파일 저장 경로 -->
+	<input type="hidden" name="FILEPATH"/>
+   <!-- 원본파일명 -->
+	<input type="hidden" name="FILENAME"/>
+   <!-- 파일 type -->
+	<input type="hidden" name="CONTYPE"/>
+   <!-- 파일 size -->
+	<input type="hidden" name="SIZE"/>
+   <!-- 커뮤니티 ID -->
+   <input type="hidden" name="COMMUNITYID"//>
+   <!-- 파일 저장소 -->
+	<input type="hidden" name="TANK"/>
+   <!-- 메시지 id -->
+	<input type="hidden" name="ID"/>
+   <!-- 첨부파일 id -->
+	<input type="hidden" name="ATTACH_ID"/>
+</form>
+<!-- 파일다운로드를 위한 Form Start -->
+
+<form name="myForm" method="post">
+	<input type="hidden" name="temp"    value="all"/>
+	<input type="hidden" name="JOB_MODE"    value="Q"/>
+	<input type="hidden" name="kind"        value="89"/>
+	<input type="hidden" name="type"        value="0"/>
+	<input type="hidden" name="mode"        value="1"/>
+	<input type="hidden" name="flag"        value=""/>
+	<input type="hidden" name="access_type" value="Y"/>
+	<input type="hidden" name="NewIndex"    value="202005052345180020"/>
+	<input type="hidden" name="index"       value="202004231559530720"/>
+	<input type="hidden" name="MESSAGE_ID"  value="89755"/>
+	<input type="hidden" name="replyTop"    value="89755"/>
+	<input type="hidden" name="replyTo"     value="0"/>
+	<input type="hidden" name="replyPos"    value="89756.0"/>
+	<input type="hidden" name="rowReply"    value="0"/>
+	<input type="hidden" name="depth"       value="0"/>
+	<input type="hidden" name="hdCurrPage"  value="1"/>
+	<input type="hidden" name="WhereSelect" value="all"/>
+	<input type="hidden" name="KeyWord"     value=""/>
+	<input type="hidden" name="title"       value=""/>
+	<input type="hidden" name="FILEID"/>
+</form>
+
+<!-- 저장, 삭제, 변경을 위한  iframe  -->
+<iframe  name="CHANGEIFRAME" style="display:none">
+</iframe>
+
+</body>
+</html>
